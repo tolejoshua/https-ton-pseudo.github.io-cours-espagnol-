@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours Français – Réalisme XIXe & Analyse Littéraire</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+  :root {
+    --ink: #1a1008;
+    --paper: #f5f0e8;
+    --cream: #ede7d5;
+    --sepia: #8b6340;
+    --rust: #c0472a;
+    --gold: #c9a84c;
+    --forest: #2d5a3d;
+    --muted: #6b5c47;
+    --accent: #7a1f1f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0;
+    width: 260px;
+    height: 100vh;
+    background: var(--ink);
+    color: var(--cream);
+    padding: 30px 0;
+    overflow-y: auto;
+    z-index: 100;
+  }
+  nav h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 0 24px 20px;
+    border-bottom: 1px solid #333;
+    margin-bottom: 16px;
+  }
+  nav a {
+    display: block;
+    padding: 9px 24px;
+    color: #c8bfad;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+  }
+  nav a:hover, nav a.active {
+    color: var(--gold);
+    border-left-color: var(--gold);
+    background: rgba(201,168,76,0.08);
+  }
+  nav .section-label {
+    padding: 18px 24px 6px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #555;
+  }
+
+  /* MAIN */
+  main {
+    margin-left: 260px;
+    padding: 50px 60px 80px;
+    max-width: 960px;
+  }
+
+  /* HERO */
+  .hero {
+    border-bottom: 3px double var(--sepia);
+    padding-bottom: 40px;
+    margin-bottom: 50px;
+  }
+  .hero .label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    color: var(--ink);
+  }
+  .hero p {
+    font-size: 17px;
+    color: var(--muted);
+    font-style: italic;
+    max-width: 620px;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--rust);
+    color: white;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+    font-family: 'Source Serif 4', serif;
+  }
+
+  /* SECTIONS */
+  section {
+    margin-bottom: 70px;
+    scroll-margin-top: 30px;
+  }
+  section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--cream);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  section h2 .num {
+    background: var(--accent);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    color: var(--forest);
+    margin: 28px 0 10px;
+  }
+  section p {
+    margin-bottom: 14px;
+    font-size: 15.5px;
+  }
+
+  /* CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+    margin: 20px 0;
+  }
+  .card {
+    background: white;
+    border: 1px solid #ddd5c5;
+    border-radius: 4px;
+    padding: 20px;
+    border-top: 4px solid var(--sepia);
+  }
+  .card.green { border-top-color: var(--forest); }
+  .card.red { border-top-color: var(--rust); }
+  .card.gold { border-top-color: var(--gold); }
+  .card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .card p, .card li {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .card ul { padding-left: 16px; }
+
+  /* QUOTE BLOCKS */
+  .quote-block {
+    background: var(--cream);
+    border-left: 4px solid var(--gold);
+    padding: 16px 20px;
+    margin: 18px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .quote-block .quote {
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .quote-block .source {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* FORMULA BOX */
+  .formula {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 24px 28px;
+    border-radius: 4px;
+    margin: 20px 0;
+    font-family: 'Playfair Display', serif;
+  }
+  .formula .title {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .formula .steps {
+    display: flex;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .formula .step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+  }
+  .formula .step .num {
+    background: var(--gold);
+    color: var(--ink);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .formula .arrow {
+    color: var(--gold);
+    font-size: 20px;
+    margin: 0 10px;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    font-size: 14px;
+  }
+  th {
+    background: var(--ink);
+    color: var(--gold);
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+  }
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e0d8cc;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #faf7f2; }
+  td strong { color: var(--accent); }
+
+  /* HIGHLIGHT BOXES */
+  .info-box {
+    border: 1px solid;
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    font-size: 14.5px;
+  }
+  .info-box.tip { border-color: var(--forest); background: #f0f7f3; }
+  .info-box.tip::before { content: "💡 ASTUCE — "; font-weight: 700; color: var(--forest); }
+  .info-box.warn { border-color: var(--rust); background: #fdf4f2; }
+  .info-box.warn::before { content: "⚠️ ATTENTION — "; font-weight: 700; color: var(--rust); }
+  .info-box.exam { border-color: var(--gold); background: #fdf9f0; }
+  .info-box.exam::before { content: "📝 À L'EXAMEN — "; font-weight: 700; color: var(--sepia); }
+
+  /* PROCÉDÉ CARDS */
+  .procede {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .procede-item {
+    background: white;
+    border: 1px solid #ddd5c5;
+    border-radius: 4px;
+    padding: 16px;
+  }
+  .procede-item .name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .procede-item .def {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .procede-item .ex {
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--cream);
+    padding: 6px 10px;
+    border-radius: 3px;
+  }
+  .procede-item .effet {
+    font-size: 12px;
+    color: var(--forest);
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  /* INTRO TEMPLATE */
+  .template-block {
+    counter-reset: step;
+    margin: 20px 0;
+  }
+  .template-item {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .template-item .tag {
+    background: var(--forest);
+    color: white;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-family: 'Source Serif 4', serif;
+    letter-spacing: 0.5px;
+  }
+  .template-item .content {
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  .template-item .content em {
+    color: var(--rust);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* EXAMPLE INTRO */
+  .example-intro {
+    background: white;
+    border: 2px solid var(--sepia);
+    border-radius: 4px;
+    padding: 24px 28px;
+    margin: 20px 0;
+    position: relative;
+  }
+  .example-intro::before {
+    content: "EXEMPLE RÉDIGÉ";
+    position: absolute;
+    top: -11px;
+    left: 20px;
+    background: white;
+    padding: 0 8px;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--sepia);
+    font-family: 'Source Serif 4', serif;
+  }
+  .example-intro p {
+    font-size: 14.5px;
+    margin-bottom: 10px;
+    line-height: 1.8;
+  }
+  .example-intro .annot {
+    font-size: 12px;
+    color: var(--rust);
+    font-style: italic;
+  }
+
+  /* PLAN SCHEMA */
+  .plan-schema {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin: 20px 0;
+  }
+  .plan-col {
+    background: white;
+    border: 1px solid #ddd5c5;
+  }
+  .plan-col .header {
+    background: var(--ink);
+    color: var(--gold);
+    padding: 12px 16px;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    text-align: center;
+  }
+  .plan-col .body {
+    padding: 14px 16px;
+  }
+  .plan-col .body li {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .plan-col .body li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+  }
+
+  /* LEXICAL FIELD */
+  .champ-lex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0;
+  }
+  .mot {
+    background: var(--cream);
+    border: 1px solid var(--sepia);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* CONNECTORS */
+  .connect-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .connect-item {
+    background: white;
+    border: 1px solid #ddd5c5;
+    padding: 12px 16px;
+    border-radius: 4px;
+  }
+  .connect-item .func {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--sepia);
+    margin-bottom: 6px;
+  }
+  .connect-item .words {
+    font-size: 13px;
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* SCROLL TARGET */
+  .scroll-anchor { scroll-margin-top: 20px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { width: 200px; }
+    main { margin-left: 200px; padding: 30px 30px 60px; }
+    .procede { grid-template-columns: 1fr; }
+    .plan-schema { grid-template-columns: 1fr; }
+    .connect-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <h2>Révision Français</h2>
+  <div class="section-label">Contenu</div>
+  <a href="#realisme">1. Le Réalisme XIXe</a>
+  <a href="#auteurs">2. Projet des auteurs réalistes</a>
+  <a href="#incipit">3. Les enjeux de l'incipit</a>
+  <a href="#interpretation">4. Démarche d'interprétation</a>
+  <a href="#structure">5. Structure intro / dév / concl</a>
+  <a href="#procedes">6. Les procédés littéraires</a>
+  <a href="#application">7. Entraînement pratique</a>
+  <a href="#vocab">8. Vocabulaire clé</a>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge">Épreuve commune Seconde · Français</div>
+    <div class="label">Cours complet de révision</div>
+    <h1>Le Réalisme & l'Analyse Littéraire</h1>
+    <p>Tout ce que tu dois savoir pour ton épreuve du 8h30 — du mouvement réaliste aux procédés, en passant par la rédaction d'une introduction parfaite.</p>
+  </div>
+
+  <!-- ============================
+       SECTION 1 : LE RÉALISME
+  ============================= -->
+  <section id="realisme" class="scroll-anchor">
+    <h2><span class="num">1</span> Le Réalisme au XIXe siècle</h2>
+
+    <h3>Qu'est-ce que le mot « réaliste » veut dire ?</h3>
+    <p>Le terme <strong>réalisme</strong> apparaît en France vers 1850. Il désigne un mouvement littéraire et artistique qui revendique de <strong>peindre la réalité telle qu'elle est</strong>, sans idéalisation ni embellissement. C'est une révolte contre le Romantisme qui, lui, exaltait les passions, le moi, la nature sublime.</p>
+
+    <div class="card-grid">
+      <div class="card red">
+        <h4>Ce que rejette le Réalisme</h4>
+        <ul>
+          <li>L'idéalisation des personnages</li>
+          <li>Les héros nobles et parfaits</li>
+          <li>L'épanchement lyrique du "Je"</li>
+          <li>Le merveilleux, le fantastique</li>
+          <li>Les décors exotiques ou héroïques</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h4>Ce que prône le Réalisme</h4>
+        <ul>
+          <li>L'observation minutieuse du réel</li>
+          <li>Les sujets ordinaires et banals</li>
+          <li>Les classes populaires et la bourgeoisie</li>
+          <li>La misère sociale sans fard</li>
+          <li>La documentation et la précision</li>
+        </ul>
+      </div>
+      <div class="card gold">
+        <h4>Auteurs clés à connaître</h4>
+        <ul>
+          <li><strong>Balzac</strong> (1799–1850) — La Comédie humaine, Le Père Goriot</li>
+          <li><strong>Flaubert</strong> (1821–1880) — Madame Bovary</li>
+          <li><strong>Maupassant</strong> (1850–1893) — Bel-Ami</li>
+          <li><strong>Zola</strong> (1840–1902) — Naturalisme, Germinal</li>
+          <li><strong>Stendhal</strong> (1783–1842) — Le Rouge et le Noir</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Les trois piliers du réalisme</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>1. L'observation minutieuse</h4>
+        <p>L'auteur se documente, observe le monde comme un scientifique. Balzac prenait des notes dans la rue. Zola descendait dans les mines.</p>
+      </div>
+      <div class="card">
+        <h4>2. L'effet de réel</h4>
+        <p>Des détails vrais, précis, concrets (objets du quotidien, noms de rues, prix) créent l'illusion que la fiction est vraie.</p>
+      </div>
+      <div class="card">
+        <h4>3. La banalité</h4>
+        <p>Refus de l'idéalisation. Les sujets sont ordinaires : une pension de famille misérable, un employé ambitieux, une femme malheureuse.</p>
+      </div>
+    </div>
+
+    <div class="info-box tip">
+      Retiens la formule : le réalisme veut que le roman soit <strong>« un miroir qu'on promène le long d'un chemin »</strong> (Stendhal). L'auteur reflète la société sans la déformer.
+    </div>
+
+    <h3>Réalisme vs Naturalisme — la nuance</h3>
+    <p>Le naturalisme (Zola) est une version <em>radicalisée</em> du réalisme : il ajoute la science. Pour Zola, l'homme est déterminé par <strong>l'hérédité</strong> (ses gènes) et le <strong>milieu social</strong> (son environnement). Le romancier naturaliste fait des « expériences » comme un biologiste.</p>
+
+    <div class="info-box exam">
+      Si le texte à analyser montre que le lieu influence le personnage (une chambre sordide révèle la misère), c'est un procédé réaliste. Si en plus on suggère que le personnage ne peut pas s'en sortir à cause de ses origines, c'est du naturalisme.
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 2 : PROJET AUTEURS
+  ============================= -->
+  <section id="auteurs" class="scroll-anchor">
+    <h2><span class="num">2</span> Le projet des auteurs réalistes</h2>
+
+    <p>Un auteur réaliste ne décrit pas juste pour décrire. Il a un <strong>projet littéraire</strong> — une intention qui dépasse la simple copie du réel. C'est essentiel à comprendre : il choisit ses détails, il oriente le lecteur.</p>
+
+    <h3>Les grandes intentions des auteurs réalistes</h3>
+    <div class="card-grid">
+      <div class="card red">
+        <h4>Dénoncer la société</h4>
+        <p>Critiquer les inégalités, la corruption, la misère des classes populaires. Montrer ce que la bourgeoisie préfère ignorer.</p>
+        <p style="margin-top:8px;font-size:13px;font-style:italic;color:#888">Ex : Zola dénonce les conditions des mineurs dans Germinal.</p>
+      </div>
+      <div class="card green">
+        <h4>Donner à voir la vérité</h4>
+        <p>Créer l'illusion du vrai par des détails concrets. Faire oublier que c'est de la fiction.</p>
+        <p style="margin-top:8px;font-size:13px;font-style:italic;color:#888">Ex : Balzac cite des prix, des adresses, des noms de rues réels.</p>
+      </div>
+      <div class="card">
+        <h4>Analyser la société comme un historien</h4>
+        <p>Balzac voulait faire « la concurrence à l'état civil » — documenter toute la société française de son époque.</p>
+      </div>
+      <div class="card gold">
+        <h4>Montrer le déterminisme</h4>
+        <p>Le milieu façonne l'homme. La chambre révèle l'âme. L'habit fait le personnage. L'environnement dit tout.</p>
+      </div>
+    </div>
+
+    <h3>Le lieu réaliste — un outil clé</h3>
+    <p>Dans un roman réaliste, la description du lieu n'est <strong>jamais gratuite</strong>. Elle remplit plusieurs fonctions :</p>
+    <ul style="padding-left:20px;margin-bottom:16px;">
+      <li style="margin-bottom:8px;font-size:15px"><strong>Caractériser le personnage :</strong> une chambre misérable dit la pauvreté et l'échec social</li>
+      <li style="margin-bottom:8px;font-size:15px"><strong>Créer une atmosphère :</strong> un décor sordide = tonalité lugubre, misère</li>
+      <li style="margin-bottom:8px;font-size:15px"><strong>Ancrer dans le réel :</strong> des détails précis créent l'effet de réel</li>
+      <li style="margin-bottom:8px;font-size:15px"><strong>Symboliser :</strong> un espace clos peut symboliser l'enfermement social</li>
+    </ul>
+
+    <div class="quote-block">
+      <div class="quote">« La fenêtre était sans rideaux... le plâtre jauni par la fumée... mauvais lit... maigre couverture... Le carreau était humide et plein de poussière... odeur de pension. »</div>
+      <div class="source">Balzac, Le Père Goriot — chaque détail dit la misère et le déclassement social</div>
+    </div>
+
+    <div class="info-box tip">
+      <strong>Méthode :</strong> Quand tu analyses un lieu réaliste, demande-toi toujours : <em>Que révèle ce décor sur le personnage qui y vit ? Quelle critique sociale l'auteur formule-t-il ?</em>
+    </div>
+
+    <h3>Le héros réaliste — l'anti-héros</h3>
+    <p>Fini le héros noble et parfait. Le héros réaliste est souvent un <strong>anti-héros</strong> : ambitieux, opportuniste, parfois sans scrupules. Il est représentatif d'une classe sociale.</p>
+    <table>
+      <tr><th>Personnage</th><th>Œuvre</th><th>Caractéristiques</th></tr>
+      <tr><td><strong>Rastignac</strong></td><td>Père Goriot (Balzac)</td><td>Jeune provincial ambitieux, apprend le cynisme parisien</td></tr>
+      <tr><td><strong>Georges Duroy (Bel-Ami)</strong></td><td>Bel-Ami (Maupassant)</td><td>Séduisant, médiocre moralement, use des femmes pour s'élever</td></tr>
+      <tr><td><strong>Julien Sorel</strong></td><td>Le Rouge et le Noir (Stendhal)</td><td>Arriviste, hypocrite, oscille entre ambition et idéal</td></tr>
+    </table>
+
+    <p>Ces personnages incarnent le thème de <strong>l'ascension sociale</strong> — gravir les échelons vers une classe supérieure — souvent au prix de compromis moraux.</p>
+  </section>
+
+  <!-- ============================
+       SECTION 3 : INCIPIT
+  ============================= -->
+  <section id="incipit" class="scroll-anchor">
+    <h2><span class="num">3</span> Les enjeux de l'incipit</h2>
+
+    <p>L'<strong>incipit</strong> (du latin <em>incipit</em> = « il commence ») désigne le <strong>début d'un roman</strong> — les premières lignes ou pages. C'est l'un des passages les plus importants et les plus souvent soumis à l'analyse linéaire au bac.</p>
+
+    <h3>Pourquoi l'incipit est-il si important ?</h3>
+    <div class="card-grid">
+      <div class="card green">
+        <h4>Fonction 1 : Informer</h4>
+        <p>Présenter le cadre spatio-temporel (où ? quand ?), les personnages principaux et la situation initiale.</p>
+      </div>
+      <div class="card">
+        <h4>Fonction 2 : Capter l'attention</h4>
+        <p>Susciter la curiosité du lecteur par une question, une scène intrigante ou un personnage mystérieux. Créer l'envie de lire la suite.</p>
+      </div>
+      <div class="card red">
+        <h4>Fonction 3 : Établir le pacte de lecture</h4>
+        <p>Signaler au lecteur le genre (roman réaliste, aventures, etc.), le ton (comique, sérieux, poétique) et le point de vue adopté.</p>
+      </div>
+      <div class="card gold">
+        <h4>Fonction 4 : Annoncer les thèmes</h4>
+        <p>Les grands thèmes de l'œuvre sont souvent déjà présents en germe dans l'incipit. Le début est une promesse sur la suite.</p>
+      </div>
+    </div>
+
+    <h3>L'incipit réaliste — ses caractéristiques spécifiques</h3>
+    <p>Dans un roman réaliste, l'incipit commence souvent par :</p>
+    <ul style="padding-left:20px;margin-bottom:16px;">
+      <li style="margin-bottom:8px;font-size:15px">Une <strong>description détaillée</strong> du lieu (la pension, le quartier, la rue)</li>
+      <li style="margin-bottom:8px;font-size:15px">Des <strong>détails précis</strong> ancrant dans le réel (date, adresse, prix)</li>
+      <li style="margin-bottom:8px;font-size:15px">Une <strong>présentation du milieu social</strong> avant même les personnages</li>
+      <li style="margin-bottom:8px;font-size:15px">Une <strong>atmosphère</strong> souvent lugubre, oppressante, qui annonce le destin du héros</li>
+    </ul>
+
+    <div class="info-box exam">
+      Pour une analyse linéaire sur un incipit, ta problématique doit porter sur comment l'auteur accomplit ces fonctions. Ex : <em>« Comment Balzac, dans cet incipit, installe-t-il une atmosphère réaliste tout en annonçant le thème de la misère sociale ? »</em>
+    </div>
+
+    <h3>Questions à se poser face à un incipit</h3>
+    <table>
+      <tr><th>Question</th><th>Ce qu'elle révèle</th></tr>
+      <tr><td>Où sommes-nous ? Quand ?</td><td>Le cadre spatio-temporel</td></tr>
+      <tr><td>Qui est le narrateur ? En sait-il tout ?</td><td>La focalisation (voir section 6)</td></tr>
+      <tr><td>Quelle est l'atmosphère ?</td><td>Le registre (réaliste, pathétique, comique…)</td></tr>
+      <tr><td>Qu'est-ce qui crée l'effet de réel ?</td><td>Les procédés réalistes (détails, champ lexical…)</td></tr>
+      <tr><td>Quel thème est déjà présent ?</td><td>Les enjeux de l'œuvre entière</td></tr>
+    </table>
+  </section>
+
+  <!-- ============================
+       SECTION 4 : INTERPRÉTATION
+  ============================= -->
+  <section id="interpretation" class="scroll-anchor">
+    <h2><span class="num">4</span> La démarche d'interprétation</h2>
+
+    <p>C'est <strong>LE cœur de l'analyse littéraire</strong>. Beaucoup d'élèves restent bloqués à l'identification des procédés sans aller plus loin. Or un bon commentaire, c'est toujours : <em>je repère → j'interprète → je conclus sur le sens.</em></p>
+
+    <div class="formula">
+      <div class="title">La formule des 3 étapes — à appliquer pour chaque procédé</div>
+      <div class="steps">
+        <div class="step"><span class="num">1</span> REPÉRER le procédé (le nommer)</div>
+        <div class="arrow">→</div>
+        <div class="step"><span class="num">2</span> INTERPRÉTER l'effet produit</div>
+        <div class="arrow">→</div>
+        <div class="step"><span class="num">3</span> LIER au sens global du texte</div>
+      </div>
+    </div>
+
+    <h3>Comment ça fonctionne concrètement ?</h3>
+
+    <div class="info-box warn">
+      Ce qu'il NE faut PAS écrire : <em>« L'auteur utilise une métaphore. »</em> — C'est juste repérer. Il manque l'interprétation et le lien.
+    </div>
+
+    <table>
+      <tr><th>❌ Formulation pauvre</th><th>✅ Formulation développée</th></tr>
+      <tr>
+        <td>« Il y a une gradation. »</td>
+        <td>« La gradation ascendante "je me meurs, je suis mort, je suis enterré" traduit l'exagération comique du personnage et souligne sa propension au dramatisme excessif. »</td>
+      </tr>
+      <tr>
+        <td>« L'auteur décrit la chambre. »</td>
+        <td>« La description minutieuse de la chambre — "plâtre jauni", "mauvais lit", "odeur de pension" — crée un effet de réel caractéristique du roman réaliste et révèle symboliquement la déchéance sociale du personnage. »</td>
+      </tr>
+      <tr>
+        <td>« Il y a un champ lexical de la misère. »</td>
+        <td>« Le champ lexical de la misère ("maigre", "sordide", "délabré") confère une atmosphère oppressante à la description et traduit l'intention réaliste de Balzac : peindre sans fard la réalité sociale des classes défavorisées. »</td>
+      </tr>
+    </table>
+
+    <h3>Les verbes d'interprétation à utiliser</h3>
+    <p>Pour commenter un procédé, il faut des verbes précis. Voici les meilleurs :</p>
+    <div class="champ-lex">
+      <span class="mot">traduit</span><span class="mot">souligne</span><span class="mot">met en évidence</span><span class="mot">suggère</span><span class="mot">révèle</span><span class="mot">crée</span><span class="mot">accentue</span><span class="mot">symbolise</span><span class="mot">illustre</span><span class="mot">manifeste</span><span class="mot">témoigne de</span><span class="mot">confère au texte</span><span class="mot">connote</span><span class="mot">renseigne sur</span>
+    </div>
+
+    <div class="info-box tip">
+      <strong>Évite absolument :</strong> "montre que", "dit que", "exprime que" — ces tournures sont trop vagues et ne prouvent pas ta maîtrise du vocabulaire d'analyse.
+    </div>
+
+    <h3>Lier fond et forme — la clé de la bonne note</h3>
+    <p>Ce qui distingue un 8/20 d'un 14/20, c'est la capacité à <strong>lier le style (la forme) au sens (le fond)</strong>. Autrement dit : pourquoi l'auteur a-t-il choisi CE procédé précis plutôt qu'un autre ? Qu'est-ce que cela dit de ses intentions ?</p>
+
+    <div class="quote-block">
+      <div class="quote">Exemple de lien fond-forme : « Maupassant choisit un champ lexical péjoratif pour décrire le comportement de Bel-Ami ("brutalement", "heurtant") tout en utilisant des termes mélioratifs pour son apparence ("joli garçon"), créant ainsi une antithèse qui révèle la duplicité du personnage : charmant en surface, impitoyable en acte. »</div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 5 : STRUCTURE
+  ============================= -->
+  <section id="structure" class="scroll-anchor">
+    <h2><span class="num">5</span> Structure d'une introduction, d'un développement et d'une conclusion</h2>
+
+    <div class="plan-schema">
+      <div class="plan-col">
+        <div class="header">Introduction</div>
+        <div class="body">
+          <ul>
+            <li>Présenter l'auteur + contexte historique/littéraire</li>
+            <li>Présenter l'œuvre (titre, genre, date)</li>
+            <li>Présenter l'extrait (sa place dans l'œuvre, qui parle, situation)</li>
+            <li>Formuler la problématique</li>
+            <li>Lire le texte (à l'oral)</li>
+            <li>Présenter la situation du texte</li>
+            <li>Annoncer les mouvements + phrase explicative</li>
+          </ul>
+        </div>
+      </div>
+      <div class="plan-col">
+        <div class="header">Développement</div>
+        <div class="body">
+          <ul>
+            <li>Analyse du 1er mouvement</li>
+            <li>Analyse du 2e mouvement</li>
+            <li>Analyse du 3e mouvement (si besoin)</li>
+            <li>Chaque mouvement = procédés + interprétation + lien au sens</li>
+          </ul>
+        </div>
+      </div>
+      <div class="plan-col">
+        <div class="header">Conclusion</div>
+        <div class="body">
+          <ul>
+            <li>Bilan qui répond à la problématique</li>
+            <li>Ouverture sur le Parcours : comparer à un autre extrait / autre auteur / autre personnage</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3>Comment rédiger l'introduction — pas à pas</h3>
+
+    <div class="template-block">
+      <div class="template-item">
+        <span class="tag">1. Auteur/Contexte</span>
+        <div class="content">Nom de l'auteur, siècle, mouvement littéraire. Ex : <em>« Honoré de Balzac, romancier du XIXe siècle, est l'un des fondateurs du mouvement réaliste français. »</em></div>
+      </div>
+      <div class="template-item">
+        <span class="tag">2. L'œuvre</span>
+        <div class="content">Titre en italique, genre, date, projet de l'auteur. Ex : <em>« Dans Le Père Goriot (1835), roman qui s'inscrit dans La Comédie humaine, Balzac peint la société parisienne dans toute sa complexité sociale. »</em></div>
+      </div>
+      <div class="template-item">
+        <span class="tag">3. L'extrait</span>
+        <div class="content">Sa place dans l'œuvre + ce qu'il se passe. Ex : <em>« Cet extrait, qui constitue l'incipit du roman, présente la pension Vauquer, lieu où se déroulera l'essentiel de l'action. »</em></div>
+      </div>
+      <div class="template-item">
+        <span class="tag">4. Problématique</span>
+        <div class="content">Une question qui porte sur le <em>comment</em> ou le <em>en quoi</em>. Ex : <em>« Comment Balzac, à travers cette description minutieuse, installe-t-il une atmosphère réaliste tout en révélant la misère sociale de ses personnages ? »</em></div>
+      </div>
+      <div class="template-item">
+        <span class="tag">5. Plan</span>
+        <div class="content">Annoncer les mouvements avec une phrase explicative. Ex : <em>« Nous étudierons dans un premier mouvement (l. 1-5) la description oppressante de l'espace, puis dans un second mouvement (l. 6-12) la révélation du milieu social. »</em></div>
+      </div>
+    </div>
+
+    <div class="example-intro">
+      <p><strong>Honoré de Balzac</strong>, romancier du XIXe siècle, est considéré comme le père du roman réaliste français. Auteur prolixe, il a entrepris de décrire l'ensemble de la société française dans son œuvre monumentale <em>La Comédie humaine</em>.</p>
+      <p class="annot">↑ Auteur + contexte</p>
+      <p><em>Le Père Goriot</em> (1835) en constitue l'un des romans les plus célèbres : il met en scène la pension Vauquer, microcosme de la société parisienne, et suit la trajectoire d'Eugène de Rastignac, jeune provincial venu conquérir Paris.</p>
+      <p class="annot">↑ L'œuvre</p>
+      <p>L'extrait proposé est l'incipit du roman. Il présente la pension Vauquer avant même d'introduire les personnages, offrant une description minutieuse et sensorielle d'un lieu misérable.</p>
+      <p class="annot">↑ L'extrait</p>
+      <p>On peut donc se demander : <strong>comment Balzac, dans cet incipit, fait-il de la description du lieu le révélateur d'un milieu social et d'une condition humaine ?</strong></p>
+      <p class="annot">↑ Problématique</p>
+      <p>Nous analyserons d'abord la construction d'un effet de réel par l'accumulation de détails sensoriels précis, puis nous verrons comment ce lieu symbolise la déchéance sociale des personnages qui l'habitent.</p>
+      <p class="annot">↑ Annonce du plan</p>
+    </div>
+
+    <h3>La conclusion — structure</h3>
+    <div class="template-block">
+      <div class="template-item">
+        <span class="tag">Bilan</span>
+        <div class="content">Répondre directement à la problématique en une ou deux phrases. Résumer ce que l'analyse a montré.</div>
+      </div>
+      <div class="template-item">
+        <span class="tag">Ouverture</span>
+        <div class="content">Faire le lien avec le Parcours (thème de la séquence), comparer à un autre texte du même auteur, ou évoquer un autre auteur réaliste qui traite du même thème.</div>
+      </div>
+    </div>
+
+    <div class="info-box warn">
+      N'écris JAMAIS en conclusion : « En conclusion, nous avons vu que... » — c'est trop scolaire. Commence par un bilan synthétique, puis enchaîne naturellement sur l'ouverture.
+    </div>
+
+    <h3>Formuler une bonne problématique</h3>
+    <p>La problématique est la question centrale de ton analyse. Elle doit :</p>
+    <ul style="padding-left:20px;margin-bottom:16px;">
+      <li style="margin-bottom:8px;font-size:15px">Commencer par <strong>« Comment… »</strong> ou <strong>« En quoi… »</strong> ou <strong>« Dans quelle mesure… »</strong></li>
+      <li style="margin-bottom:8px;font-size:15px">Porter sur le <em>style</em> de l'auteur et ses <em>effets</em>, pas juste sur le contenu</li>
+      <li style="margin-bottom:8px;font-size:15px">Être spécifique au texte, pas générique</li>
+    </ul>
+    <div class="card-grid">
+      <div class="card red">
+        <h4>❌ Mauvaise problématique</h4>
+        <p>« Qu'est-ce que le réalisme ? » — Trop générale, pas liée au texte.</p>
+        <p style="margin-top:8px">« De quoi parle ce texte ? » — Ce n'est pas une problématique littéraire.</p>
+      </div>
+      <div class="card green">
+        <h4>✅ Bonne problématique</h4>
+        <p>« Comment la description minutieuse du lieu révèle-t-elle la misère sociale des personnages ? »</p>
+        <p style="margin-top:8px">« En quoi cet incipit réaliste fait-il du décor un révélateur de la condition humaine ? »</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 6 : PROCÉDÉS
+  ============================= -->
+  <section id="procedes" class="scroll-anchor">
+    <h2><span class="num">6</span> Les procédés littéraires</h2>
+
+    <p>Pour chaque procédé : sais-tu le <strong>nommer</strong>, le <strong>repérer</strong> dans un texte, et <strong>dire quel effet il produit</strong> ? C'est ce qu'on attend de toi.</p>
+
+    <h3>Les figures de style essentielles</h3>
+
+    <div class="procede">
+      <div class="procede-item">
+        <div class="name">La Métaphore</div>
+        <div class="def">Comparaison SANS outil de comparaison. Deux réalités fusionnent directement.</div>
+        <div class="ex">« L'amour est un roman du cœur. »</div>
+        <div class="effet">→ Crée une image forte, suggère un lien inattendu entre deux réalités.</div>
+      </div>
+      <div class="procede-item">
+        <div class="name">La Comparaison</div>
+        <div class="def">Rapproche deux réalités avec un outil : comme, tel que, ainsi que, semblable à.</div>
+        <div class="ex">« La musique me prend <strong>comme</strong> une mer. »</div>
+        <div class="effet">→ Éclaire une réalité par une image accessible au lecteur.</div>
+      </div>
+      <div class="procede-item">
+        <div class="name">L'Hyperbole</div>
+        <div class="def">Exagération volontaire pour amplifier une idée ou un sentiment.</div>
+        <div class="ex">« Je meurs de faim. »</div>
+        <div class="effet">→ Dramatise ou rend comique. Selon le contexte : pathétique ou ironique.</div>
+      </div>
+      <div class="procede-item">
+        <div class="name">L'Anaphore</div>
+        <div class="def">Répétition d'un mot ou groupe de mots en DÉBUT de phrase/vers.</div>
+        <div class="ex">« Rome, l'unique objet... / Rome, à qui vient ton bras... / Rome, qui t'a vu naître... »</div>
+        <div class="effet">→ Insistance, martèlement d'une idée, effet oratoire puissant.</div>
+      </div>
+      <div class="procede-item">
+        <div class="name">L'Antithèse</div>
+        <div class="def">Deux termes opposés dans le même énoncé, en construction symétrique.</div>
+        <div class="ex">« Je vis, je meurs : je me brûle et me noie. »</div>
+        <div class="effet">→ Souligne une tension, un paradoxe, un conflit intérieur.</div>
+      </div>
+      <div class="procede-item">
+        <div class="name">L'Oxymore</div>
+        <div class="def">Deux mots opposés JUXTAPOSÉS — directement collés l'un à l'autre.</div>
+        <div class="ex">« Cette <strong>obscure clarté</strong> qui tombe des étoiles. »</div>
+        <div class="effet">→ Crée un paradoxe saisissant, une contradiction volontaire qui surprend.</div>
+      </div>
+      <div class="procede-item">
+        <div class="name">La Gradation</div>
+        <div class="def">Accumulation de termes d'intensité croissante (ascendante) ou décroissante.</div>
+        <div class="ex">« Je me meurs, je suis mort, je suis enterré ! »</div>
+        <div class="effet">→ Montée dramatique ou comique vers un climax.</div>
+      </div>
+      <div class="procede-item">
+        <div class="name">L'Accumulation / Énumération</div>
+        <div class="def">Liste de termes de même nature et même fonction.</div>
+        <div class="ex">« Ils ont des pointes, des épines, des lames, des griffes, des ongles. »</div>
+        <div class="effet">→ Effet de quantité, de profusion, d'exhaustivité.</div>
+      </div>
+      <div class="procede-item">
+        <div class="name">La Personnification</div>
+        <div class="def">Attribuer des caractéristiques humaines à un objet ou être inanimé.</div>
+        <div class="ex">« Venise pour le bal <strong>s'habille</strong>. »</div>
+        <div class="effet">→ Anime le décor, crée de la vie là où il n'y en a pas.</div>
+      </div>
+      <div class="procede-item">
+        <div class="name">La Litote</div>
+        <div class="def">Dire MOINS pour signifier PLUS. Atténuation qui amplifie.</div>
+        <div class="ex">« Je ne te hais point. » (= je t'aime passionnément)</div>
+        <div class="effet">→ Understatement ironique ou retenu. Souligne par le sous-entendu.</div>
+      </div>
+      <div class="procede-item">
+        <div class="name">L'Euphémisme</div>
+        <div class="def">Remplacer un mot dur par une expression plus douce.</div>
+        <div class="ex">« Il nous a quittés. » (= il est mort)</div>
+        <div class="effet">→ Adoucit une réalité difficile. Peut aussi créer un effet ironique.</div>
+      </div>
+      <div class="procede-item">
+        <div class="name">La Métonymie</div>
+        <div class="def">Remplacer un mot par un autre avec lequel il a un rapport logique (contenu/contenant, lieu/institution…)</div>
+        <div class="ex">« Boire un <strong>verre</strong>. » / « L'Élysée a déclaré... »</div>
+        <div class="effet">→ Raccourci expressif, suggestif, économie de langage.</div>
+      </div>
+    </div>
+
+    <h3>Le champ lexical</h3>
+    <p>Un <strong>champ lexical</strong> est un ensemble de mots d'un texte qui se rapportent à un même thème ou une même idée. Ce n'est pas une figure de style, mais un outil d'analyse fondamental.</p>
+    <div class="info-box tip">
+      Pour repérer un champ lexical, regroupe les mots du texte par thème : misère, mort, lumière, violence, etc. Puis interprète : que traduit la présence de ce champ lexical ? Quelle atmosphère crée-t-il ?
+    </div>
+
+    <h3>Les expansions du nom</h3>
+    <p>Une expansion du nom est tout ce qui complète, précise ou qualifie un nom. Elle enrichit la description réaliste en ajoutant des détails.</p>
+    <table>
+      <tr><th>Type</th><th>Définition</th><th>Exemple</th></tr>
+      <tr><td><strong>Adjectif qualificatif</strong></td><td>Qualifie directement le nom</td><td>« un <strong>mauvais</strong> lit »</td></tr>
+      <tr><td><strong>Complément du nom (CDN)</strong></td><td>Groupe nominale précisant le nom</td><td>« une odeur <strong>de pension</strong> »</td></tr>
+      <tr><td><strong>Proposition relative</strong></td><td>Proposition introduite par qui/que/dont</td><td>« le plâtre <strong>qui se décollait</strong> »</td></tr>
+      <tr><td><strong>Apposition</strong></td><td>Nom ou groupe ajouté pour préciser</td><td>« la chambre, <strong>repaire de misère</strong>, semblait »</td></tr>
+    </table>
+    <div class="info-box tip">
+      Dans un roman réaliste, les auteurs accumulent les expansions du nom pour créer la précision descriptive et l'effet de réel. Chaque détail compte.
+    </div>
+
+    <h3>Les sensations / Les 5 sens</h3>
+    <p>Le réalisme appelle les sens du lecteur pour l'immerger dans la réalité décrite. Il faut savoir identifier quel sens est sollicité.</p>
+    <table>
+      <tr><th>Sensation</th><th>Ce qu'elle évoque</th><th>Exemple</th></tr>
+      <tr><td><strong>Visuelle</strong></td><td>Couleurs, lumières, formes, apparences</td><td>« le plâtre jauni », « fenêtre sans rideaux »</td></tr>
+      <tr><td><strong>Olfactive</strong></td><td>Odeurs, parfums, puanteurs</td><td>« odeur de pension », « remugles de graisse »</td></tr>
+      <tr><td><strong>Tactile</strong></td><td>Textures, températures, humidité</td><td>« le carreau humide », « maigre couverture »</td></tr>
+      <tr><td><strong>Auditive</strong></td><td>Sons, bruits, silences</td><td>« le bruit sourd des pas », « craquements »</td></tr>
+      <tr><td><strong>Gustative</strong></td><td>Goûts, saveurs</td><td>Plus rare dans la description de lieu</td></tr>
+    </table>
+    <div class="info-box exam">
+      Quand tu relèves des sensations dans un texte réaliste, dis toujours ce qu'elles servent : créent-elles une atmosphère oppressante ? sordide ? montrent-elles la misère ? l'abondance ? Le procédé seul ne suffit pas.
+    </div>
+
+    <h3>La focalisation (le point de vue)</h3>
+    <p>La <strong>focalisation</strong> désigne le positionnement du narrateur par rapport aux personnages : que sait-il ? que voit-il ? C'est la « caméra » du roman.</p>
+    <div class="card-grid">
+      <div class="card">
+        <h4>🎥 Focalisation zéro (narrateur omniscient)</h4>
+        <p>Le narrateur sait TOUT : les pensées, le passé, l'avenir de tous les personnages.</p>
+        <p style="margin-top:8px;font-size:13px;color:#888">Le narrateur > le personnage. Fréquent chez Balzac et Flaubert.</p>
+      </div>
+      <div class="card green">
+        <h4>🔍 Focalisation interne</h4>
+        <p>Le récit passe par les yeux et les pensées d'UN personnage. On sait ce qu'il sait, on voit ce qu'il voit. Subjectivité.</p>
+        <p style="margin-top:8px;font-size:13px;color:#888">Narrateur = Personnage. Crée l'identification du lecteur.</p>
+      </div>
+      <div class="card red">
+        <h4>📹 Focalisation externe</h4>
+        <p>Le narrateur observe de l'extérieur, comme une caméra. Il ne sait PAS ce que pense le personnage.</p>
+        <p style="margin-top:8px;font-size:13px;color:#888">Narrateur < Personnage. Crée un effet de mystère, de distance.</p>
+      </div>
+    </div>
+    <div class="info-box tip">
+      Pour identifier la focalisation : est-ce que le narrateur parle des pensées intimes d'un personnage ? Si oui → interne ou zéro. Décrit-il uniquement les actions visibles ? → externe.
+    </div>
+
+    <h3>Les paroles rapportées</h3>
+    <p>Comment l'auteur rend-il compte des paroles et pensées de ses personnages ?</p>
+    <table>
+      <tr><th>Type</th><th>Caractéristiques</th><th>Exemple</th></tr>
+      <tr>
+        <td><strong>Discours direct</strong></td>
+        <td>Guillemets, tirets. Les paroles exactes du personnage. Vivacité, authenticité.</td>
+        <td>« Je ne partirai pas, dit-il. »</td>
+      </tr>
+      <tr>
+        <td><strong>Discours indirect</strong></td>
+        <td>Proposition subordonnée, verbe introducteur. Paroles rapportées, filtrées par le narrateur.</td>
+        <td>Il dit qu'il ne partirait pas.</td>
+      </tr>
+      <tr>
+        <td><strong>Discours indirect libre</strong></td>
+        <td>Pas de guillemets ni de verbe introducteur. Mélange voix du narrateur et pensées du personnage. Flaubert en est le maître.</td>
+        <td>Vraiment, il ne partirait pas. C'était décidé.</td>
+      </tr>
+    </table>
+    <div class="info-box tip">
+      Le discours indirect libre est très fréquent dans les romans réalistes. Il permet de mêler la voix du narrateur et celle du personnage de façon subtile, créant une ambiguïté sur qui "parle" vraiment.
+    </div>
+
+    <h3>L'ironie</h3>
+    <p>L'ironie consiste à dire le contraire de ce qu'on veut faire entendre. Le lecteur comprend le vrai sens grâce au contexte.</p>
+    <div class="card-grid">
+      <div class="card">
+        <h4>L'antiphrase</h4>
+        <p>La forme la plus directe de l'ironie : « Quel temps magnifique ! » (sous la pluie).</p>
+        <p style="margin-top:8px;font-size:13px;color:#888">Effet : moquerie, critique déguisée, distanciation.</p>
+      </div>
+      <div class="card">
+        <h4>Indices à repérer</h4>
+        <ul style="font-size:13px;color:#666;padding-left:14px">
+          <li>Décalage entre le ton et le sujet</li>
+          <li>Adjectifs trop élogieux appliqués à qqch de mauvais</li>
+          <li>Hyperbole dans un contexte absurde</li>
+          <li>Vocabulaire d'éloge pour quelque chose de ridicule</li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-box exam">
+      Dans les romans réalistes, l'ironie du narrateur est souvent subtile : il semble décrire froidement, mais le choix des mots révèle une critique implicite. Ex : Flaubert ironise sur Emma Bovary en décrivant ses rêves romanesques avec des mots qui les ridiculisent discrètement.
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 7 : ENTRAÎNEMENT
+  ============================= -->
+  <section id="application" class="scroll-anchor">
+    <h2><span class="num">7</span> Entraînement — Repérer les aspects réalistes</h2>
+
+    <h3>Méthode : comment aborder un texte à l'examen</h3>
+    <p>Voici les étapes à suivre dès que tu reçois le texte :</p>
+
+    <div class="template-block">
+      <div class="template-item">
+        <span class="tag">Étape 1</span>
+        <div class="content">Lire le texte en entier une première fois pour comprendre le sens global. Qui parle ? Où ? Quand ? Que se passe-t-il ?</div>
+      </div>
+      <div class="template-item">
+        <span class="tag">Étape 2</span>
+        <div class="content">Relire en annotant : souligner les procédés (figures de style, champs lexicaux, expansions du nom, sensations), noter la focalisation.</div>
+      </div>
+      <div class="template-item">
+        <span class="tag">Étape 3</span>
+        <div class="content">Identifier les mouvements du texte : découper le texte en 2, 3 ou 4 parties cohérentes (changement de ton, de sujet, d'action).</div>
+      </div>
+      <div class="template-item">
+        <span class="tag">Étape 4</span>
+        <div class="content">Formuler la problématique : quelle est l'intention de l'auteur dans ce passage ? Quel effet veut-il produire sur le lecteur ?</div>
+      </div>
+      <div class="template-item">
+        <span class="tag">Étape 5</span>
+        <div class="content">Rédiger l'introduction puis analyser mouvement par mouvement, en appliquant la formule : repérer → interpréter → lier au sens.</div>
+      </div>
+    </div>
+
+    <h3>Checklist des aspects réalistes à repérer</h3>
+    <table>
+      <tr><th>Procédé réaliste</th><th>Ce qu'il crée</th><th>À dire en analyse</th></tr>
+      <tr><td>Accumulation de détails précis</td><td>Effet de réel</td><td>« Cette accumulation de détails concrets crée un effet de réel qui ancre le lecteur dans la réalité sociale de l'époque. »</td></tr>
+      <tr><td>Champ lexical de la misère / dégradation</td><td>Atmosphère sordide</td><td>« Le champ lexical de la dégradation ("jauni", "mauvais", "maigre") confère une atmosphère oppressante et traduit la misère des personnages. »</td></tr>
+      <tr><td>Sensations multiples (surtout olfactif)</td><td>Immersion sensorielle</td><td>« Les sensations olfactive ("odeur de pension") et tactile ("humide") immergent le lecteur dans la réalité physique du lieu. »</td></tr>
+      <tr><td>Vocabulaire péjoratif / mélioratif</td><td>Jugement implicite de l'auteur</td><td>« Le vocabulaire péjoratif révèle le regard critique de l'auteur sur la condition sociale qu'il décrit. »</td></tr>
+      <tr><td>Comparaison / métaphore sociale</td><td>Dimension symbolique</td><td>« La métaphore filée de la prison/cage symbolise l'enfermement social du personnage dans sa condition. »</td></tr>
+      <tr><td>Focalisation zéro</td><td>Regard omniscient, critique sociale</td><td>« La focalisation omnisciente permet à l'auteur de porter un jugement sur l'ensemble de la société qu'il observe. »</td></tr>
+    </table>
+
+    <h3>Exemple de plan détaillé sur un incipit réaliste</h3>
+    <div class="quote-block">
+      <div class="quote">Texte imaginaire d'exercice : « La chambre donnait sur une cour pavée, noire de suie. Les rideaux, autrefois blancs, pendaient comme des linceuls jaunes. Une odeur de soupe froide et de linge moisi flottait dans l'air vicié. Sur le lit de fer, une couverture mince, usée jusqu'à la trame, couvrait mal un matelas dont les ressorts grinçaient au moindre mouvement. »</div>
+    </div>
+
+    <p><strong>Plan détaillé possible :</strong></p>
+
+    <div class="card-grid">
+      <div class="card green">
+        <h4>Mouvement 1 — L. 1-2 : Un espace clos et sombre</h4>
+        <ul>
+          <li>Champ lexical de l'obscurité : "noire", "suie"</li>
+          <li>Expansions du nom précises : "cour pavée"</li>
+          <li>Sensation visuelle dégradée → misère</li>
+          <li>Focalisation externe : description objective</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Mouvement 2 — L. 2-4 : L'atmosphère sensorielle</h4>
+        <ul>
+          <li>Métaphore : "comme des linceuls" → mort symbolique</li>
+          <li>Sensation olfactive : "odeur de soupe froide"</li>
+          <li>Accumulation : "soupe froide et linge moisi"</li>
+          <li>Registre pathétique → pitié du lecteur</li>
+        </ul>
+      </div>
+      <div class="card red">
+        <h4>Mouvement 3 — L. 4-5 : Un mobilier révélateur</h4>
+        <ul>
+          <li>Gradation dans la dégradation : "mince, usée, grinçait"</li>
+          <li>Expansions du nom précises</li>
+          <li>Sensation tactile + auditive</li>
+          <li>Effet de réel → critique sociale de la misère</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       SECTION 8 : VOCABULAIRE CLÉ
+  ============================= -->
+  <section id="vocab" class="scroll-anchor">
+    <h2><span class="num">8</span> Vocabulaire clé à maîtriser</h2>
+
+    <h3>Qualifier l'atmosphère d'un texte réaliste</h3>
+    <div class="champ-lex">
+      <span class="mot">lugubre</span><span class="mot">oppressante</span><span class="mot">sordide</span><span class="mot">délétère</span><span class="mot">morbide</span><span class="mot">misérabiliste</span><span class="mot">pesante</span><span class="mot">glauque</span><span class="mot">pathétique</span><span class="mot">dramatique</span>
+    </div>
+
+    <h3>Parler du projet de l'auteur</h3>
+    <div class="champ-lex">
+      <span class="mot">dénoncer</span><span class="mot">critiquer</span><span class="mot">dépeindre</span><span class="mot">peindre fidèlement</span><span class="mot">révéler</span><span class="mot">mettre en garde</span><span class="mot">alerter</span><span class="mot">donner à voir</span><span class="mot">s'indigner de</span>
+    </div>
+
+    <h3>Connecteurs logiques pour structurer ton analyse</h3>
+    <div class="connect-grid">
+      <div class="connect-item">
+        <div class="func">Addition</div>
+        <div class="words">de plus, en outre, par ailleurs, également, de surcroît</div>
+      </div>
+      <div class="connect-item">
+        <div class="func">Opposition</div>
+        <div class="words">cependant, néanmoins, toutefois, or, en revanche, pourtant</div>
+      </div>
+      <div class="connect-item">
+        <div class="func">Conséquence</div>
+        <div class="words">ainsi, donc, par conséquent, c'est pourquoi, de sorte que</div>
+      </div>
+      <div class="connect-item">
+        <div class="func">Cause</div>
+        <div class="words">car, en effet, parce que, du fait que, puisque</div>
+      </div>
+      <div class="connect-item">
+        <div class="func">Illustration</div>
+        <div class="words">c'est ainsi que, comme le montre, tel que, à l'image de</div>
+      </div>
+      <div class="connect-item">
+        <div class="func">Conclusion</div>
+        <div class="words">en définitive, au terme de cette analyse, il apparaît que</div>
+      </div>
+    </div>
+
+    <h3>Formules d'introduction pour commenter un procédé</h3>
+    <table>
+      <tr><th>Début de phrase</th><th>Usage</th></tr>
+      <tr><td>« On observe [procédé]... qui traduit/souligne... »</td><td>Pour commenter sobrement</td></tr>
+      <tr><td>« L'auteur a recours à [procédé]... afin de... »</td><td>Pour montrer l'intention</td></tr>
+      <tr><td>« Le champ lexical de X confère au texte une dimension... »</td><td>Pour les champs lexicaux</td></tr>
+      <tr><td>« La focalisation X permet à l'auteur de... »</td><td>Pour le point de vue</td></tr>
+      <tr><td>« Cette [figure] révèle / symbolise / accentue... »</td><td>Pour interpréter une figure</td></tr>
+      <tr><td>« L'accumulation de [éléments] crée un effet de... »</td><td>Pour les accumulations/listes</td></tr>
+    </table>
+
+    <div class="info-box exam">
+      <strong>Rappel final :</strong> Toujours terminer ton analyse d'un procédé par sa <strong>fonction dans le texte</strong>. Le jury veut voir que tu comprends POURQUOI l'auteur a fait ce choix, pas seulement QUE tu l'as vu.
+    </div>
+
+    <div style="margin-top:40px;padding:30px;background:var(--ink);border-radius:6px;text-align:center">
+      <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);margin-bottom:12px">Formule de réussite</div>
+      <div style="color:var(--cream);font-size:16px;line-height:1.8">
+        <strong style="color:var(--gold)">REPÉRER</strong> le procédé — le nommer précisément<br>
+        <strong style="color:var(--gold)">INTERPRÉTER</strong> l'effet — quel est l'impact sur le lecteur ?<br>
+        <strong style="color:var(--gold)">LIER</strong> au projet de l'auteur — pourquoi ce choix dans ce texte ?<br><br>
+        <span style="font-size:13px;color:#aaa">Bonne chance pour ton épreuve de 8h30 !</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // Highlight active nav section on scroll
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 60) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
