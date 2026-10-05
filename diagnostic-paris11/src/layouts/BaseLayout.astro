@@ -25,7 +25,9 @@ interface Props {
   ogType?: 'website' | 'article';
 }
 
-const { title, description, schemas = [], breadcrumbs, noindex = false, ogType = 'website' } = Astro.props;
+const { title, description, schemas = [], breadcrumbs, noindex: noindexPage = false, ogType = 'website' } = Astro.props;
+// NOINDEX=true (variable d'environnement) : site de prévisualisation, non indexé par les moteurs.
+const noindex = noindexPage || process.env.NOINDEX === 'true';
 const siteUrl = (Astro.site ?? new URL('https://www.votre-domaine.fr')).toString().replace(/\/$/, '/');
 const canonical = new URL(Astro.url.pathname, siteUrl).toString();
 const ogImage = new URL('/og-default.png', siteUrl).toString();
