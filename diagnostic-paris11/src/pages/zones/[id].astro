@@ -1,0 +1,64 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import Faq from '@/components/Faq.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { faqSchema } from '@/lib/schema';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('zones');
+  return entries.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const z = entry.data;
+const diagnostics = (await getCollection('diagnostics')).sort((a, b) => a.data.order - b.data.order);
+const others = (await getCollection('zones')).filter((x) => x.id !== entry.id).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout
+  title={z.seoTitle}
+  description={z.description}
+  breadcrumbs={[{ name: 'Zones desservies', href: '/zones/' }, { name: z.label, href: `/zones/${entry.id}/` }]}
+  schemas={z.faq.length ? [faqSchema(z.faq)] : []}
+>
+  <section class="container-site pt-10 pb-12 md:pt-14">
+    <h1 class="max-w-4xl text-5xl leading-[1.05] md:text-6xl">{z.title}</h1>
+    <p class="mt-6 max-w-2xl text-lg text-muted">{z.description}</p>
+    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+      <a href="/devis/" class="btn btn-primary">Demander un devis <Icon name="arrow-right" class="size-4" /></a>
+      <a href="/rendez-vous/" class="btn btn-ghost">Prendre rendez-vous</a>
+    </div>
+  </section>
+
+  <section class="container-site grid gap-12 border-t border-line pt-4 pb-10 lg:grid-cols-12">
+    <article class="prose-site lg:col-span-8"><Content /></article>
+    <aside class="lg:col-span-4 lg:pt-16">
+      {z.places.length > 0 && (
+        <div class="rounded-[6px] border border-line bg-surface p-6">
+          <h2 class="font-sans text-base font-bold">Secteurs desservis</h2>
+          <ul class="mt-4 flex flex-wrap gap-2">
+            {z.places.map((p) => <li class="rounded-full border border-line-strong px-3 py-1 text-sm">{p}</li>)}
+          </ul>
+        </div>
+      )}
+      <div class="mt-6 rounded-[6px] bg-night p-6 text-on-night">
+        <h2 class="font-sans text-base font-bold">Nos diagnostics</h2>
+        <ul class="mt-4 grid gap-2">
+          {diagnostics.map((d) => <li><a href={`/diagnostics/${d.id}/`} class="flex items-center gap-2 text-on-night-muted hover:text-accent-on-night"><Icon name={d.data.icon} class="size-4 text-accent-on-night" />{d.data.shortName}</a></li>)}
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <Faq items={z.faq} />
+
+  <section class="container-site pb-20" aria-labelledby="other-zones">
+    <h2 id="other-zones" class="text-3xl">Autres secteurs</h2>
+    <ul class="mt-6 flex flex-wrap gap-2">
+      {others.map((o) => <li><a href={`/zones/${o.id}/`} class="inline-flex min-h-11 items-center rounded-full border border-line-strong px-4 text-sm font-medium hover:border-ink">{o.data.label}</a></li>)}
+    </ul>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

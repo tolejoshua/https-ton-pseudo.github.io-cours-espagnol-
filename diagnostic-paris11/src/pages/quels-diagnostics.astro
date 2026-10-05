@@ -1,0 +1,119 @@
+---
+/**
+ * Simulateur : liste des diagnostics obligatoires selon le bien.
+ * Fonctionne entièrement dans le navigateur (aucune donnée envoyée).
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import Faq from '@/components/Faq.astro';
+import { faqSchema } from '@/lib/schema';
+
+const questions = [
+  { name: 'operation', legend: 'Vous souhaitez', options: [['vente', 'Vendre'], ['location', 'Louer']] },
+  { name: 'bien', legend: 'Type de bien', options: [['appartement', 'Appartement (copropriété)'], ['maison', 'Maison']] },
+  { name: 'construction', legend: 'Année de construction de l’immeuble', options: [['avant1949', 'Avant 1949'], ['avant1997', '1949 à juin 1997'], ['apres1997', 'Après juillet 1997'], ['inconnu', 'Je ne sais pas']] },
+  { name: 'electricite', legend: 'Installation électrique', options: [['plus15', 'Plus de 15 ans'], ['moins15', 'Moins de 15 ans (justificatif)'], ['inconnu', 'Je ne sais pas']] },
+  { name: 'gaz', legend: 'Installation de gaz', options: [['aucun', 'Pas de gaz'], ['plus15', 'Plus de 15 ans'], ['moins15', 'Moins de 15 ans'], ['inconnu', 'Je ne sais pas']] },
+  { name: 'localisation', legend: 'Localisation', options: [['paris', 'Paris'], ['petite-couronne', 'Petite couronne (92, 93, 94)']] },
+];
+
+const faq = [
+  { q: 'Le résultat du simulateur est-il définitif ?', a: 'Il est indicatif et s’appuie sur les règles générales en vigueur. Le devis confirme la liste exacte après vérification de l’année du permis de construire, des justificatifs d’installation et de la situation de votre commune.' },
+  { q: 'Mes réponses sont-elles enregistrées ?', a: 'Non. Le simulateur fonctionne entièrement dans votre navigateur ; aucune donnée n’est transmise tant que vous n’envoyez pas de demande de devis.' },
+];
+---
+<BaseLayout
+  title="Quels diagnostics pour vendre ou louer ? Simulateur gratuit"
+  description="Vente ou location, appartement ou maison, année de construction : obtenez en 30 secondes la liste des diagnostics immobiliers obligatoires et leur validité."
+  breadcrumbs={[{ name: 'Simulateur', href: '/quels-diagnostics/' }]}
+  schemas={[faqSchema(faq)]}
+>
+  <section class="container-site pt-10 pb-8 md:pt-14">
+    <h1 class="max-w-3xl text-5xl leading-[1.05] md:text-6xl">Quels diagnostics pour votre bien ?</h1>
+    <p class="mt-6 max-w-2xl text-lg text-muted">Répondez à six questions. La liste des diagnostics obligatoires s’affiche avec leur durée de validité.</p>
+  </section>
+
+  <section class="container-site grid gap-10 pb-20 lg:grid-cols-12">
+    <form id="simu" class="grid content-start gap-9 lg:col-span-7" novalidate>
+      {questions.map((q) => (
+        <fieldset>
+          <legend class="mb-3 text-lg font-semibold">{q.legend}</legend>
+          <div class="flex flex-wrap gap-2">
+            {q.options.map(([value, label], i) => (
+              <span class="relative">
+                <input class="chip-input" type="radio" id={`${q.name}-${value}`} name={q.name} value={value} checked={i === 0} />
+                <label class="chip" for={`${q.name}-${value}`}>{label}</label>
+              </span>
+            ))}
+          </div>
+        </fieldset>
+      ))}
+      <fieldset data-bail hidden>
+        <legend class="mb-3 text-lg font-semibold">Type de location</legend>
+        <div class="flex flex-wrap gap-2">
+          <span class="relative"><input class="chip-input" type="radio" id="bail-vide" name="bail" value="vide" checked /><label class="chip" for="bail-vide">Vide</label></span>
+          <span class="relative"><input class="chip-input" type="radio" id="bail-meuble" name="bail" value="meuble" /><label class="chip" for="bail-meuble">Meublée</label></span>
+        </div>
+      </fieldset>
+    </form>
+
+    <div class="lg:col-span-5">
+      <div class="rounded-[6px] bg-night p-7 text-on-night lg:sticky lg:top-28" aria-live="polite">
+        <h2 class="text-3xl">Diagnostics à prévoir</h2>
+        <ul id="simu-results" class="mt-6 grid gap-4"></ul>
+        <p id="simu-note" class="mt-5 hidden text-sm text-on-night-muted"></p>
+        <a id="simu-cta" href="/devis/" class="btn btn-primary mt-7 w-full">Demander un devis <Icon name="arrow-right" class="size-4" /></a>
+        <p class="mt-4 text-xs leading-relaxed text-on-night-muted">Résultat indicatif, confirmé lors du devis. Règles en vigueur en octobre 2026.</p>
+      </div>
+    </div>
+  </section>
+
+  <Faq items={faq} />
+</BaseLayout>
+
+<script>
+  import { computeDiagnostics, type Answers } from '@/lib/simulator';
+
+  const form = document.getElementById('simu') as HTMLFormElement;
+  const list = document.getElementById('simu-results')!;
+  const note = document.getElementById('simu-note')!;
+  const cta = document.getElementById('simu-cta') as HTMLAnchorElement;
+  const bail = document.querySelector<HTMLFieldSetElement>('[data-bail]')!;
+
+  const statusLabel = { obligatoire: 'Obligatoire', 'a-verifier': 'À vérifier', 'a-disposition': 'À tenir à disposition' } as const;
+
+  function escape(s: string) {
+    return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+  }
+
+  function update() {
+    const data = Object.fromEntries(new FormData(form)) as unknown as Answers;
+    bail.hidden = data.operation !== 'location';
+    const results = computeDiagnostics(data);
+    list.innerHTML = results
+      .map((r) => `
+        <li class="border-t border-white/10 pt-4">
+          <div class="flex items-baseline justify-between gap-3">
+            <a class="font-semibold hover:text-accent-on-night" href="/diagnostics/${r.id}/">${escape(r.name)}</a>
+            <span class="shrink-0 text-xs font-bold ${r.status === 'obligatoire' ? 'text-accent-on-night' : 'text-on-night-muted'}">${statusLabel[r.status]}</span>
+          </div>
+          <p class="mt-1 text-sm text-on-night-muted">${escape(r.reason)}</p>
+          <p class="mt-1 text-sm">Validité : ${escape(r.validity)}</p>
+        </li>`)
+      .join('');
+
+    const notes: string[] = [];
+    if (data.operation === 'vente' && data.bien === 'maison')
+      notes.push('Maison classée E, F ou G au DPE : un audit énergétique est en principe exigé pour la vente.');
+    if (data.operation === 'location')
+      notes.push('Un logement classé G ne peut plus faire l’objet d’un nouveau bail en métropole ; les logements F seront concernés en 2028.');
+    note.textContent = notes.join(' ');
+    note.classList.toggle('hidden', notes.length === 0);
+
+    const ids = [...new Set(results.map((r) => r.id))].join(',');
+    cta.href = `/devis/?diagnostics=${ids}&operation=${data.operation}&bien=${data.bien}`;
+  }
+
+  form.addEventListener('change', update);
+  update();
+</script>

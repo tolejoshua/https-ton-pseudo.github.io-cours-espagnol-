@@ -1,0 +1,102 @@
+---
+/**
+ * Page Tarifs. Les montants viennent de src/config/tarifs.ts.
+ * Tant que `pricing.isExample` vaut true, un avertissement est affiché
+ * et chaque prix porte la mention « exemple ».
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import Faq from '@/components/Faq.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { pricing, formatPrice } from '@/config/tarifs';
+import { site } from '@/config/site';
+import { faqSchema } from '@/lib/schema';
+
+const diagnostics = (await getCollection('diagnostics')).sort((a, b) => a.data.order - b.data.order);
+const ex = pricing.isExample;
+
+const faq = [
+  { q: 'Pourquoi les prix varient-ils selon le bien ?', a: 'Le temps passé sur place et le nombre de diagnostics dépendent de la surface, de l’année de construction (plomb, amiante) et de l’âge des installations (électricité, gaz). Le devis tient compte de votre situation exacte.' },
+  { q: 'La demande de devis engage-t-elle à quelque chose ?', a: 'Non. Vous recevez un devis détaillé et vous décidez ensuite, sans aucune obligation.' },
+  { q: 'Les analyses de laboratoire sont-elles comprises ?', a: 'Si un prélèvement est nécessaire pour l’amiante, le coût éventuel de l’analyse en laboratoire vous est indiqué avant toute intervention.' },
+];
+---
+<BaseLayout
+  title={`Tarifs diagnostic immobilier Paris 11e | ${site.name}`}
+  description="Prix des diagnostics immobiliers à Paris : packs vente et location par typologie de bien, diagnostics à l’unité. Devis détaillé et sans engagement."
+  breadcrumbs={[{ name: 'Tarifs', href: '/tarifs/' }]}
+  schemas={[faqSchema(faq)]}
+>
+  <section class="container-site pt-10 pb-10 md:pt-14">
+    <h1 class="max-w-3xl text-5xl leading-[1.05] md:text-6xl">Tarifs</h1>
+    <p class="mt-6 max-w-2xl text-lg text-muted">Des prix lisibles, par type de bien. Le devis confirme le montant exact selon les diagnostics réellement nécessaires.</p>
+    {ex && (
+      <p class="mt-8 flex max-w-3xl gap-3 rounded-[6px] p-5 todo" role="note">
+        <Icon name="warning" class="size-6 shrink-0" />
+        <span>Prix fictifs donnés à titre d’exemple : à remplacer par les tarifs réels du cabinet dans <code>src/config/tarifs.ts</code>.</span>
+      </p>
+    )}
+  </section>
+
+  <!-- PACKS -->
+  <section class="container-site pb-16" aria-labelledby="packs-title">
+    <h2 id="packs-title" class="sr-only">Packs vente et location</h2>
+    <div class="grid gap-6 lg:grid-cols-2">
+      {pricing.packs.map((p, i) => (
+        <article class:list={['flex flex-col rounded-[6px] p-7 md:p-9', i === 0 ? 'bg-night text-on-night' : 'border border-line bg-surface']} data-reveal style={`--i:${i}`}>
+          <h3 class="text-4xl">{p.name}</h3>
+          <p class={`mt-3 ${i === 0 ? 'text-on-night-muted' : 'text-muted'}`}>{p.description}</p>
+          <ul class="mt-6 flex flex-wrap gap-2">
+            {p.includes.map((inc) => (
+              <li class={`rounded-full border px-3 py-1 text-sm ${i === 0 ? 'border-white/20' : 'border-line-strong'}`}>{inc}</li>
+            ))}
+          </ul>
+          <dl class="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3">
+            {pricing.propertyTypes.map((t) => (
+              <div>
+                <dt class={`text-sm ${i === 0 ? 'text-on-night-muted' : 'text-muted'}`}>{t.label}<span class="block text-xs">{t.hint}</span></dt>
+                <dd class="mt-1 font-display text-3xl font-semibold">
+                  {formatPrice(p.prices[t.id as keyof typeof p.prices])}
+                  {ex && <span class="todo ml-1 align-middle text-[0.65rem]">exemple</span>}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <a href={`/devis/?operation=${p.id}`} class={`btn mt-auto self-start ${i === 0 ? 'btn-primary' : 'btn-ghost'}`} style="margin-top:2.5rem">Demander un devis</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- À L'UNITÉ -->
+  <section class="border-t border-line bg-surface" aria-labelledby="unit-title">
+    <div class="container-site grid gap-10 py-16 md:py-20 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <h2 id="unit-title" class="text-4xl leading-tight">Diagnostics à l’unité</h2>
+        <p class="mt-4 text-muted">Prix de départ pour un studio ou un deux-pièces.</p>
+      </div>
+      <ul class="grid gap-x-10 sm:grid-cols-2 lg:col-span-8">
+        {diagnostics.map((d) => (
+          <li class="flex items-baseline justify-between gap-4 border-b border-line py-4">
+            <a href={`/diagnostics/${d.id}/`} class="font-semibold hover:text-accent">{d.data.shortName}</a>
+            <span class="shrink-0 text-right">
+              <span class="text-sm text-muted">dès </span>
+              <span class="font-display text-2xl font-semibold">{formatPrice(pricing.single[d.id] ?? 0)}</span>
+              {ex && <span class="todo ml-1 text-[0.65rem]">exemple</span>}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="container-site py-12">
+    <ul class="grid gap-3 text-muted md:grid-cols-3">
+      {pricing.notes.map((n) => <li class="flex gap-3"><Icon name="info" class="mt-0.5 size-5 shrink-0 text-accent" />{n}</li>)}
+    </ul>
+  </section>
+
+  <Faq items={faq} />
+  <CtaBand />
+</BaseLayout>

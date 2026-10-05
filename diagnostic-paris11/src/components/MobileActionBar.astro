@@ -1,0 +1,13 @@
+---
+/** Barre d'actions fixée en bas d'écran sur mobile : appeler / devis. */
+import { site, phoneHref } from '@/config/site';
+import Icon from './Icon.astro';
+---
+<div class="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-bg/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:hidden">
+  <div class:list={['grid gap-3', site.contact.showPhone ? 'grid-cols-2' : 'grid-cols-1']}>
+    {site.contact.showPhone && (
+      <a href={phoneHref} class="btn btn-ghost min-h-12"><Icon name="phone" class="size-5" />Appeler</a>
+    )}
+    <a href="/devis/" class="btn btn-primary min-h-12 px-3 text-[0.92rem]">Demander un devis</a>
+  </div>
+</div>

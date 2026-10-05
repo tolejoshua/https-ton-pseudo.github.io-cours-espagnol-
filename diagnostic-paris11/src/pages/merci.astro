@@ -1,0 +1,16 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import { site, phoneHref } from '@/config/site';
+---
+<BaseLayout title={`Demande envoyée | ${site.name}`} description="Votre demande a bien été envoyée." noindex>
+  <section class="container-site max-w-3xl py-24 md:py-32">
+    <Icon name="seal-check" class="size-12 text-accent" />
+    <h1 class="mt-6 text-5xl leading-[1.05] md:text-6xl">Merci, votre demande est bien envoyée.</h1>
+    <p class="mt-6 text-lg text-muted">Nous revenons vers vous rapidement. En cas d’urgence, n’hésitez pas à nous appeler{site.contact.showPhone && <> au <a href={phoneHref} class="link font-semibold">{site.contact.phoneDisplay}</a></>}.</p>
+    <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+      <a href="/" class="btn btn-ghost">Retour à l’accueil</a>
+      <a href="/blog/" class="btn btn-ghost">Lire nos conseils</a>
+    </div>
+  </section>
+</BaseLayout>

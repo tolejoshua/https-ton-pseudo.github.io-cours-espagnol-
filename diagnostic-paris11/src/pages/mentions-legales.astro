@@ -1,0 +1,37 @@
+---
+import LegalPage from '@/components/legal/LegalPage.astro';
+import Todo from '@/components/Todo.astro';
+import { site } from '@/config/site';
+const L = site.legal;
+---
+<LegalPage title="Mentions légales" description={`Mentions légales du site ${site.name}, diagnostics immobiliers à Paris 11e.`} path="/mentions-legales/" updated="5 octobre 2026">
+  <h2>Éditeur du site</h2>
+  <p>
+    {L.companyName ?? <Todo label="raison sociale" />}, {L.legalForm ?? <Todo label="forme juridique" />} au capital de {L.capital ?? <Todo label="capital social" />}<br />
+    Siège : {site.address.street}, {site.address.postalCode} {site.address.city}<br />
+    SIRET : {L.siret ?? <Todo label="SIRET" />} · {L.rcs ?? <Todo label="RCS" />}<br />
+    N° TVA intracommunautaire : {L.vat ?? <Todo label="TVA" />}<br />
+    Téléphone : {site.contact.phoneDisplay} · E-mail : {site.contact.email ?? <Todo label="e-mail" />}
+  </p>
+  <p>Directeur de la publication : {L.director ?? <Todo label="nom du dirigeant" />}</p>
+
+  <h2>Activité réglementée</h2>
+  <p>
+    Diagnostiqueur immobilier certifié par {site.certification.body ?? <Todo label="organisme certificateur" />}
+    {site.certification.number ? `, certificat n° ${site.certification.number}` : ''}.
+    Assurance responsabilité civile professionnelle : {site.insurance.insurer ?? <Todo label="assureur" />}
+    {site.insurance.policyNumber ? `, contrat n° ${site.insurance.policyNumber}` : ''}.
+  </p>
+
+  <h2>Hébergement</h2>
+  <p>{L.host.name}, {L.host.address}. <a href={L.host.url} rel="noopener">{L.host.url}</a></p>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>Les textes, illustrations et éléments graphiques de ce site sont la propriété de l’éditeur, sauf mention contraire. Toute reproduction sans autorisation est interdite.</p>
+
+  <h2>Informations réglementaires</h2>
+  <p>Les contenus de ce site sont fournis à titre d’information générale, à jour à la date indiquée. Ils ne remplacent pas l’analyse de votre situation par le diagnostiqueur lors du devis.</p>
+
+  <h2>Données personnelles</h2>
+  <p>Voir notre <a href="/confidentialite/">politique de confidentialité et de gestion des cookies</a>.</p>
+</LegalPage>

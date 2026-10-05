@@ -1,0 +1,122 @@
+---
+/**
+ * Prise de rendez-vous.
+ * - Si `calcomLink` est renseigné dans src/config/site.ts : agenda Cal.com en ligne
+ *   (confirmation et rappels par e-mail gérés par Cal.com), chargé au clic pour
+ *   ne pas ralentir la page.
+ * - Sinon : formulaire de demande de créneau (Netlify Forms), confirmé par le cabinet.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import ConsentAndSubmit from '@/components/forms/ConsentAndSubmit.astro';
+import { site, phoneHref } from '@/config/site';
+import { getCollection } from 'astro:content';
+const diagnostics = (await getCollection('diagnostics')).sort((a, b) => a.data.order - b.data.order);
+const today = new Date().toISOString().slice(0, 10);
+---
+<BaseLayout
+  title={`Rendez-vous diagnostic immobilier Paris | ${site.name}`}
+  description="Prenez rendez-vous pour vos diagnostics immobiliers à Paris et en petite couronne. Intervention généralement sous une semaine, rapport sous 24 h."
+  breadcrumbs={[{ name: 'Rendez-vous', href: '/rendez-vous/' }]}
+>
+  <section class="container-site grid gap-12 pt-10 pb-20 md:pt-14 lg:grid-cols-12">
+    <div class="lg:col-span-4">
+      <h1 class="text-5xl leading-[1.05] md:text-6xl">Prendre rendez-vous</h1>
+      <p class="mt-6 text-lg text-muted">
+        Indiquez vos disponibilités : nous confirmons le créneau par téléphone ou par e-mail. Intervention généralement {site.delays.appointment}.
+      </p>
+      <p class="mt-6 text-muted">Vous n’avez pas encore de devis ? <a href="/devis/" class="link font-semibold">Demandez-le d’abord</a>, c’est plus simple pour préparer la visite.</p>
+      {site.contact.showPhone && (
+        <a href={phoneHref} class="btn btn-ghost mt-8"><Icon name="phone" class="size-5" />{site.contact.phoneDisplay}</a>
+      )}
+    </div>
+
+    <div class="rounded-[6px] border border-line bg-surface p-6 md:p-10 lg:col-span-8">
+      {site.calcomLink ? (
+        <div data-cal={site.calcomLink}>
+          <p class="text-muted">Choisissez directement un créneau dans notre agenda. Vous recevrez une confirmation et un rappel par e-mail.</p>
+          <button type="button" class="btn btn-primary mt-6" data-cal-load><Icon name="calendar-check" class="size-5" />Afficher l’agenda</button>
+        </div>
+      ) : (
+        <form name="rendez-vous" method="POST" action="/merci/" data-netlify="true" netlify-honeypot="bot-field" class="grid gap-8" data-enhance>
+          <input type="hidden" name="form-name" value="rendez-vous" />
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div class="field">
+              <label for="rdv-date1">Date souhaitée</label>
+              <input id="rdv-date1" name="date_1" type="date" min={today} class="input" required />
+            </div>
+            <div class="field">
+              <label for="rdv-moment">Moment de la journée</label>
+              <select id="rdv-moment" name="moment" class="input">
+                <option>Matin</option>
+                <option>Après-midi</option>
+                <option>Indifférent</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="rdv-date2">Autre date possible <span class="font-normal text-muted">(facultatif)</span></label>
+              <input id="rdv-date2" name="date_2" type="date" min={today} class="input" />
+            </div>
+            <div class="field">
+              <label for="rdv-surface">Surface approximative (m²)</label>
+              <input id="rdv-surface" name="surface" type="number" inputmode="numeric" min="1" max="5000" class="input" required />
+            </div>
+            <div class="field sm:col-span-2">
+              <label for="rdv-adresse">Adresse du bien</label>
+              <input id="rdv-adresse" name="adresse" type="text" autocomplete="street-address" class="input" required placeholder="Numéro, rue, code postal, ville" />
+            </div>
+          </div>
+
+          <fieldset class="grid gap-3">
+            <legend class="mb-3 font-semibold">Diagnostics prévus <span class="font-normal text-muted">(facultatif)</span></legend>
+            <div class="flex flex-wrap gap-2">
+              {diagnostics.map((d) => (
+                <span class="relative">
+                  <input class="chip-input" type="checkbox" id={`rdv-${d.id}`} name="diagnostics" value={d.id} />
+                  <label class="chip" for={`rdv-${d.id}`}>{d.data.shortName}</label>
+                </span>
+              ))}
+            </div>
+          </fieldset>
+
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div class="field">
+              <label for="rdv-nom">Nom et prénom</label>
+              <input id="rdv-nom" name="nom" type="text" autocomplete="name" class="input" required minlength="2" />
+            </div>
+            <div class="field">
+              <label for="rdv-tel">Téléphone</label>
+              <input id="rdv-tel" name="telephone" type="tel" autocomplete="tel" inputmode="tel" class="input" required pattern="^(\+33\s?|0)[1-9]([\s.\-]?\d{2}){4}$" data-error="Saisissez un numéro français, ex. 06 12 34 56 78." />
+            </div>
+            <div class="field sm:col-span-2">
+              <label for="rdv-email">E-mail</label>
+              <input id="rdv-email" name="email" type="email" autocomplete="email" class="input" required data-error="Saisissez une adresse e-mail valide." />
+            </div>
+            <div class="field sm:col-span-2">
+              <label for="rdv-acces">Accès au logement <span class="font-normal text-muted">(facultatif)</span></label>
+              <textarea id="rdv-acces" name="acces" rows="3" class="input" placeholder="Code, étage, gardien, personne présente…"></textarea>
+            </div>
+          </div>
+
+          <ConsentAndSubmit label="Demander ce créneau" formName="rdv" />
+        </form>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { enhanceForm } from '@/scripts/forms';
+  document.querySelectorAll<HTMLFormElement>('form[data-enhance]').forEach(enhanceForm);
+
+  // Chargement de l'agenda Cal.com uniquement à la demande (performance et vie privée).
+  const wrap = document.querySelector<HTMLElement>('[data-cal]');
+  wrap?.querySelector('[data-cal-load]')?.addEventListener('click', () => {
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://cal.com/${wrap.dataset.cal}?embed=true&theme=auto`;
+    iframe.title = 'Agenda de prise de rendez-vous';
+    iframe.loading = 'lazy';
+    iframe.className = 'mt-6 h-[720px] w-full rounded-[6px] border border-line';
+    wrap.replaceChildren(iframe);
+  });
+</script>

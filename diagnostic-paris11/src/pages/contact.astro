@@ -1,0 +1,88 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import Todo from '@/components/Todo.astro';
+import ConsentAndSubmit from '@/components/forms/ConsentAndSubmit.astro';
+import { site, phoneHref } from '@/config/site';
+---
+<BaseLayout
+  title={`Contact | ${site.name}, diagnostics immobiliers Paris 11e`}
+  description="Contactez le cabinet de diagnostic immobilier du 54 avenue Philippe Auguste, Paris 11e : téléphone, formulaire, adresse et horaires."
+  breadcrumbs={[{ name: 'Contact', href: '/contact/' }]}
+>
+  <section class="container-site grid gap-12 pt-10 pb-20 md:pt-14 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <h1 class="text-5xl leading-[1.05] md:text-6xl">Contact</h1>
+      <dl class="mt-10 grid gap-8">
+        {site.contact.showPhone && (
+          <div class="flex gap-4">
+            <Icon name="phone" class="mt-1 size-6 shrink-0 text-accent" />
+            <div>
+              <dt class="text-sm font-semibold text-muted">Téléphone</dt>
+              <dd><a href={phoneHref} class="font-display text-3xl font-semibold hover:text-accent">{site.contact.phoneDisplay}</a></dd>
+            </div>
+          </div>
+        )}
+        <div class="flex gap-4">
+          <Icon name="map-pin" class="mt-1 size-6 shrink-0 text-accent" />
+          <div>
+            <dt class="text-sm font-semibold text-muted">Adresse</dt>
+            <dd class="text-lg">
+              {site.address.street}<br />{site.address.postalCode} {site.address.city}
+              <a href={site.address.mapsUrl} target="_blank" rel="noopener" class="link mt-1 flex items-center gap-1 text-base">Itinéraire <Icon name="arrow-up-right" class="size-4" /></a>
+              {site.address.receivesPublic === null && <span class="mt-2 block text-sm"><Todo label="accueil du public sur place ?" /></span>}
+            </dd>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <Icon name="clock" class="mt-1 size-6 shrink-0 text-accent" />
+          <div>
+            <dt class="text-sm font-semibold text-muted">Horaires</dt>
+            <dd class="text-lg">
+              {site.hours ? site.hours.map((h) => <span class="block">{h.label} : {h.opens.replace(':', 'h')} - {h.closes.replace(':', 'h')}</span>) : <Todo label="horaires d’ouverture" />}
+            </dd>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <Icon name="envelope" class="mt-1 size-6 shrink-0 text-accent" />
+          <div>
+            <dt class="text-sm font-semibold text-muted">E-mail</dt>
+            <dd class="text-lg">{site.contact.email ? <a class="link" href={`mailto:${site.contact.email}`}>{site.contact.email}</a> : <Todo label="adresse e-mail au nom de domaine" />}</dd>
+          </div>
+        </div>
+      </dl>
+    </div>
+
+    <div class="rounded-[6px] border border-line bg-surface p-6 md:p-10 lg:col-span-7">
+      <h2 class="text-3xl">Écrivez-nous</h2>
+      <p class="mt-2 text-muted">Pour un devis, le <a href="/devis/" class="link">formulaire dédié</a> est plus rapide.</p>
+      <form name="contact" method="POST" action="/merci/" data-netlify="true" netlify-honeypot="bot-field" class="mt-8 grid gap-6" data-enhance>
+        <input type="hidden" name="form-name" value="contact" />
+        <div class="grid gap-6 sm:grid-cols-2">
+          <div class="field">
+            <label for="c-nom">Nom et prénom</label>
+            <input id="c-nom" name="nom" type="text" autocomplete="name" class="input" required minlength="2" />
+          </div>
+          <div class="field">
+            <label for="c-tel">Téléphone <span class="font-normal text-muted">(facultatif)</span></label>
+            <input id="c-tel" name="telephone" type="tel" autocomplete="tel" inputmode="tel" class="input" pattern="^(\+33\s?|0)[1-9]([\s.\-]?\d{2}){4}$" data-error="Saisissez un numéro français, ex. 06 12 34 56 78." />
+          </div>
+          <div class="field sm:col-span-2">
+            <label for="c-email">E-mail</label>
+            <input id="c-email" name="email" type="email" autocomplete="email" class="input" required data-error="Saisissez une adresse e-mail valide." />
+          </div>
+          <div class="field sm:col-span-2">
+            <label for="c-message">Message</label>
+            <textarea id="c-message" name="message" rows="6" class="input" required minlength="10"></textarea>
+          </div>
+        </div>
+        <ConsentAndSubmit label="Envoyer le message" formName="contact" />
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { enhanceForm } from '@/scripts/forms';
+  document.querySelectorAll<HTMLFormElement>('form[data-enhance]').forEach(enhanceForm);
+</script>

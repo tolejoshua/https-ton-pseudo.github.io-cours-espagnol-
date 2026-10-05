@@ -1,0 +1,54 @@
+---
+/**
+ * Avis clients. Source : src/content/avis.json (avis RÉELS copiés depuis Google).
+ * Tant que le fichier est vide, un état d'attente sobre est affiché :
+ * aucun avis n'est jamais inventé.
+ */
+import { getCollection } from 'astro:content';
+import { site } from '@/config/site';
+import Icon from './Icon.astro';
+import Todo from './Todo.astro';
+
+interface Props { limit?: number }
+const { limit = 6 } = Astro.props;
+const reviews = (await getCollection('avis')).sort((a, b) => +b.data.date - +a.data.date).slice(0, limit);
+const fmt = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' });
+---
+<section aria-labelledby="avis-title" class="container-site py-20 md:py-28">
+  <div class="max-w-2xl">
+    <h2 id="avis-title" class="text-4xl leading-tight md:text-5xl">Ce qu’en disent nos clients</h2>
+    <p class="mt-4 text-lg text-muted">Avis publiés sur notre fiche Google, reproduits sans modification.</p>
+  </div>
+
+  {reviews.length > 0 ? (
+    <ul class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {reviews.map((r, i) => (
+        <li class="flex flex-col rounded-[6px] border border-line bg-surface p-7" data-reveal style={`--i:${i}`}>
+          <div class="flex gap-1 text-accent" aria-label={`Note : ${r.data.rating} sur 5`} role="img">
+            {Array.from({ length: r.data.rating }).map(() => <Icon name="star" class="size-4" />)}
+          </div>
+          <blockquote class="mt-4 line-clamp-5 leading-relaxed">“{r.data.text}”</blockquote>
+          <p class="mt-auto pt-6 text-sm text-muted">
+            <span class="font-semibold text-ink">{r.data.author}</span>, avis {r.data.source}, {fmt.format(r.data.date)}
+          </p>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <div class="mt-12 flex flex-col items-start gap-6 rounded-[6px] border border-dashed border-line-strong p-8 md:flex-row md:items-center md:justify-between">
+      <p class="max-w-xl text-muted">
+        Les avis de nos clients sont consultables sur notre fiche Google.
+        <Todo label="ajouter les avis réels dans src/content/avis.json" />
+      </p>
+      {site.googleBusinessUrl
+        ? <a href={site.googleBusinessUrl} class="btn btn-ghost" target="_blank" rel="noopener">Voir les avis Google <Icon name="arrow-up-right" class="size-4" /></a>
+        : <Todo label="lien de la fiche Google" />}
+    </div>
+  )}
+
+  {reviews.length > 0 && site.googleBusinessUrl && (
+    <a href={site.googleBusinessUrl} class="link mt-8 inline-flex items-center gap-1 font-semibold" target="_blank" rel="noopener">
+      Lire tous les avis sur Google <Icon name="arrow-up-right" class="size-4" />
+    </a>
+  )}
+</section>

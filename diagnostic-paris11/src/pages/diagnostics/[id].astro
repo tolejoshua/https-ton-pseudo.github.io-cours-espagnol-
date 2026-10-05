@@ -1,0 +1,114 @@
+---
+/**
+ * Modèle commun aux pages de diagnostic.
+ * Le contenu vient de src/content/diagnostics/<id>.md
+ */
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import Faq from '@/components/Faq.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { pricing, formatPrice } from '@/config/tarifs';
+import { faqSchema, serviceSchema } from '@/lib/schema';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('diagnostics');
+  return entries.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const all = await getCollection('diagnostics');
+const related = d.related.map((id) => all.find((x) => x.id === id)).filter(Boolean);
+const price = pricing.single[entry.id];
+const siteUrl = (Astro.site ?? new URL('https://www.votre-domaine.fr')).toString();
+const url = new URL(Astro.url.pathname, siteUrl).toString();
+---
+<BaseLayout
+  title={d.seoTitle}
+  description={d.description}
+  breadcrumbs={[{ name: 'Diagnostics', href: '/diagnostics/' }, { name: d.shortName, href: `/diagnostics/${entry.id}/` }]}
+  schemas={[serviceSchema({ name: d.title, description: d.description, url, siteUrl }), ...(d.faq.length ? [faqSchema(d.faq)] : [])]}
+>
+  <section class="container-site grid gap-10 pt-10 pb-14 md:pt-14 lg:grid-cols-12 lg:gap-14">
+    <div class="lg:col-span-7">
+      <Icon name={d.icon} class="size-10 text-accent" />
+      <h1 class="mt-6 text-5xl leading-[1.05] md:text-6xl">{d.title}</h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-muted">{d.summary}</p>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a href={`/devis/?diagnostics=${entry.id}`} class="btn btn-primary">Demander un devis <Icon name="arrow-right" class="size-4" /></a>
+        <a href="/rendez-vous/" class="btn btn-ghost">Prendre rendez-vous</a>
+      </div>
+    </div>
+
+    <!-- Fiche synthétique -->
+    <aside class="self-start rounded-[6px] bg-night p-7 text-on-night lg:col-span-5" aria-label="L’essentiel">
+      <dl class="grid gap-5">
+        <div>
+          <dt class="text-sm font-semibold text-on-night-muted">Biens concernés</dt>
+          <dd class="mt-1">{d.concerned}</dd>
+        </div>
+        <div class="border-t border-white/10 pt-5">
+          <dt class="text-sm font-semibold text-on-night-muted">En cas de vente</dt>
+          <dd class="mt-1">{d.sale}</dd>
+        </div>
+        <div class="border-t border-white/10 pt-5">
+          <dt class="text-sm font-semibold text-on-night-muted">En cas de location</dt>
+          <dd class="mt-1">{d.rental}</dd>
+        </div>
+        {price && (
+          <div class="border-t border-white/10 pt-5">
+            <dt class="text-sm font-semibold text-on-night-muted">Prix indicatif</dt>
+            <dd class="mt-1">
+              À partir de <span class="font-display text-3xl font-semibold text-accent-on-night">{formatPrice(price)}</span>
+              {pricing.isExample && <span class="todo ml-2">exemple</span>}
+              <a href="/tarifs/" class="mt-1 block text-sm text-on-night-muted underline underline-offset-2 hover:text-on-night">Voir la grille tarifaire</a>
+            </dd>
+          </div>
+        )}
+      </dl>
+    </aside>
+  </section>
+
+  <article class="container-site border-t border-line pt-4 pb-10">
+    <div class="prose-site">
+      <Content />
+    </div>
+
+    {d.sources.length > 0 && (
+      <aside class="mt-14 max-w-[68ch] rounded-[6px] border border-line p-6 text-sm" aria-labelledby="sources-title">
+        <h2 id="sources-title" class="font-sans text-base font-bold">Références réglementaires</h2>
+        <ul class="mt-3 grid gap-2 text-muted">
+          {d.sources.map((s) => (
+            <li>{s.url ? <a class="link" href={s.url} target="_blank" rel="noopener">{s.label}</a> : s.label}</li>
+          ))}
+        </ul>
+        <p class="mt-4 text-muted">Informations à jour en octobre 2026. Elles ne remplacent pas l’avis du diagnostiqueur sur votre situation.</p>
+      </aside>
+    )}
+  </article>
+
+  <Faq items={d.faq} />
+
+  {related.length > 0 && (
+    <section class="container-site pb-20" aria-labelledby="related-title">
+      <h2 id="related-title" class="text-3xl md:text-4xl">Souvent réalisés ensemble</h2>
+      <ul class="mt-8 grid gap-4 md:grid-cols-3">
+        {related.map((r) => r && (
+          <li>
+            <a href={`/diagnostics/${r.id}/`} class="group flex h-full items-start gap-4 rounded-[6px] border border-line bg-surface p-6 hover:border-line-strong">
+              <Icon name={r.data.icon} class="size-7 shrink-0 text-accent" />
+              <span>
+                <span class="block text-lg font-semibold group-hover:text-accent">{r.data.shortName}</span>
+                <span class="mt-1 block text-sm text-muted">Validité : {r.data.validityHeadline.replace("*", "")}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <CtaBand />
+</BaseLayout>

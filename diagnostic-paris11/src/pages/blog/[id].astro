@@ -1,0 +1,85 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import Faq from '@/components/Faq.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { articleSchema, faqSchema } from '@/lib/schema';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', (p) => !p.data.draft);
+  return posts.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const p = entry.data;
+const words = (entry.body ?? '').split(/\s+/).length;
+const minutes = Math.max(2, Math.round(words / 220));
+const fmt = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+const siteUrl = (Astro.site ?? new URL('https://www.votre-domaine.fr')).toString();
+const url = new URL(Astro.url.pathname, siteUrl).toString();
+const diagnostics = await getCollection('diagnostics');
+const related = p.related.map((id) => diagnostics.find((d) => d.id === id)).filter(Boolean);
+const others = (await getCollection('blog', (x) => !x.data.draft && x.id !== entry.id)).slice(0, 2);
+---
+<BaseLayout
+  title={p.seoTitle ?? p.title}
+  description={p.description}
+  ogType="article"
+  breadcrumbs={[{ name: 'Conseils', href: '/blog/' }, { name: p.title, href: `/blog/${entry.id}/` }]}
+  schemas={[
+    articleSchema({ title: p.title, description: p.description, url, date: p.date, updated: p.updated, siteUrl }),
+    ...(p.faq.length ? [faqSchema(p.faq)] : []),
+  ]}
+>
+  <article>
+    <header class="container-site pt-10 pb-10 md:pt-14">
+      <p class="text-sm text-muted">
+        <time datetime={p.date.toISOString()}>{fmt.format(p.date)}</time>
+        {p.updated && <> · mis à jour le <time datetime={p.updated.toISOString()}>{fmt.format(p.updated)}</time></>}
+        · {minutes} min de lecture
+      </p>
+      <h1 class="mt-4 max-w-4xl text-5xl leading-[1.05] md:text-6xl">{p.title}</h1>
+    </header>
+    <div class="container-site grid gap-12 border-t border-line pt-4 pb-10 lg:grid-cols-12">
+      <div class="prose-site lg:col-span-8"><Content /></div>
+      <aside class="lg:col-span-4 lg:pt-16">
+        <div class="rounded-[6px] bg-night p-6 text-on-night lg:sticky lg:top-28">
+          <p class="font-display text-2xl font-semibold">Besoin d’un diagnostic ?</p>
+          <p class="mt-2 text-sm text-on-night-muted">Rendez-vous généralement sous une semaine, rapport sous 24 h.</p>
+          <a href="/devis/" class="btn btn-primary mt-5 w-full">Demander un devis</a>
+          {related.length > 0 && (
+            <ul class="mt-6 grid gap-2 border-t border-white/10 pt-5 text-sm">
+              {related.map((r) => r && <li><a href={`/diagnostics/${r.id}/`} class="flex items-center gap-2 text-on-night-muted hover:text-accent-on-night"><Icon name={r.data.icon} class="size-4 text-accent-on-night" />{r.data.shortName}</a></li>)}
+            </ul>
+          )}
+        </div>
+      </aside>
+    </div>
+    {p.sources.length > 0 && (
+      <div class="container-site">
+        <aside class="max-w-[68ch] rounded-[6px] border border-line p-6 text-sm" aria-labelledby="src-title">
+          <h2 id="src-title" class="font-sans text-base font-bold">Sources</h2>
+          <ul class="mt-3 grid gap-2 text-muted">
+            {p.sources.map((s) => <li>{s.url ? <a class="link" href={s.url} target="_blank" rel="noopener">{s.label}</a> : s.label}</li>)}
+          </ul>
+        </aside>
+      </div>
+    )}
+  </article>
+
+  <Faq items={p.faq} />
+
+  {others.length > 0 && (
+    <section class="container-site pb-20" aria-labelledby="more-title">
+      <h2 id="more-title" class="text-3xl">À lire aussi</h2>
+      <ul class="mt-6 grid gap-x-10 md:grid-cols-2">
+        {others.map((o) => (
+          <li class="border-t border-line"><a href={`/blog/${o.id}/`} class="group block py-6"><span class="text-2xl font-display font-semibold group-hover:text-accent">{o.data.title}</span></a></li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <CtaBand />
+</BaseLayout>

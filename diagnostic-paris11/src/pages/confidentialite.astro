@@ -1,0 +1,42 @@
+---
+import LegalPage from '@/components/legal/LegalPage.astro';
+import Todo from '@/components/Todo.astro';
+import { site } from '@/config/site';
+---
+<LegalPage title="Confidentialité et cookies" description={`Politique de confidentialité (RGPD) et cookies du site ${site.name}.`} path="/confidentialite/" updated="5 octobre 2026">
+  <h2>Responsable du traitement</h2>
+  <p>{site.legal.companyName ?? <Todo label="raison sociale" />}, {site.address.street}, {site.address.postalCode} {site.address.city}. Contact : {site.contact.email ?? <Todo label="e-mail" />}.</p>
+
+  <h2>Données collectées et finalités</h2>
+  <p>Lorsque vous utilisez nos formulaires (devis, rendez-vous, contact), nous recueillons : nom, téléphone, adresse e-mail, adresse et caractéristiques du bien, et votre message. Ces données servent uniquement à :</p>
+  <ul>
+    <li>établir un devis et organiser l’intervention ;</li>
+    <li>répondre à vos questions ;</li>
+    <li>assurer le suivi de la prestation et respecter nos obligations légales.</li>
+  </ul>
+  <p>Base légale : l’exécution de mesures précontractuelles prises à votre demande, puis l’exécution du contrat et nos obligations légales.</p>
+  <p>Le simulateur « Quels diagnostics pour mon bien ? » fonctionne entièrement dans votre navigateur : vos réponses ne nous sont pas transmises.</p>
+
+  <h2>Durée de conservation</h2>
+  <ul>
+    <li>Demandes sans suite : 3 ans à compter du dernier contact.</li>
+    <li>Données clients : durée de la relation contractuelle, puis durées de prescription et obligations comptables.</li>
+  </ul>
+
+  <h2>Destinataires</h2>
+  <p>
+    Vos données sont destinées au seul cabinet. Elles transitent par notre hébergeur, Netlify, Inc. (États-Unis), qui traite les formulaires en tant que sous-traitant.
+    <Todo label="vérifier les garanties de transfert hors UE dans le contrat de traitement (DPA) de Netlify" />
+    Elles ne sont jamais vendues ni cédées.
+  </p>
+
+  <h2>Vos droits</h2>
+  <p>Vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité. Pour l’exercer, écrivez-nous à {site.contact.email ?? <Todo label="e-mail" />} ou par courrier à l’adresse ci-dessus. Vous pouvez aussi introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr" rel="noopener">cnil.fr</a>).</p>
+
+  <h2>Cookies</h2>
+  <p>
+    Ce site <strong>ne dépose aucun cookie publicitaire ni de mesure d’audience</strong>. Les polices de caractères sont hébergées sur nos propres serveurs : aucune donnée n’est transmise à des tiers lors de votre navigation.
+    {site.plausibleDomain && <> La fréquentation est mesurée avec Plausible Analytics, un outil sans cookie qui ne collecte aucune donnée personnelle.</>}
+  </p>
+  <p>Si vous choisissez d’afficher l’agenda de prise de rendez-vous en ligne, ou de suivre un lien vers Google Maps, ces services tiers peuvent déposer leurs propres cookies, selon leurs politiques respectives. Ils ne sont chargés qu’à votre demande.</p>
+</LegalPage>

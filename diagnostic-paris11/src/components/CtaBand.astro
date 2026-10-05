@@ -1,0 +1,35 @@
+---
+/** Bandeau d'appel à l'action final (devis, rendez-vous, téléphone). */
+import { site, phoneHref } from '@/config/site';
+import Icon from './Icon.astro';
+interface Props { title?: string; text?: string }
+const {
+  title = 'Un diagnostic à prévoir ?',
+  text = `Décrivez votre bien en deux minutes. Nous vous répondons avec un devis détaillé et une date d’intervention, généralement ${site.delays.appointment}.`,
+} = Astro.props;
+---
+<section class="container-site pb-20 md:pb-28">
+  <div class="relative overflow-hidden rounded-[6px] bg-night px-6 py-14 text-on-night md:px-14 md:py-20" data-reveal>
+    <div class="relative z-10 grid gap-10 md:grid-cols-12 md:items-end">
+      <div class="md:col-span-7">
+        <h2 class="text-4xl leading-tight md:text-5xl">{title}</h2>
+        <p class="mt-5 max-w-xl text-lg text-on-night-muted">{text}</p>
+      </div>
+      <div class="flex flex-col gap-3 sm:flex-row md:col-span-5 md:justify-end">
+        <a href="/devis/" class="btn btn-primary">Demander un devis <Icon name="arrow-right" class="size-4" /></a>
+        <a href="/rendez-vous/" class="btn btn-night">Prendre rendez-vous</a>
+      </div>
+    </div>
+    {site.contact.showPhone && (
+      <p class="relative z-10 mt-10 border-t border-white/10 pt-6 text-on-night-muted">
+        Vous préférez en parler ?
+        <a href={phoneHref} class="ml-1 font-semibold text-accent-on-night underline-offset-4 hover:underline">{site.contact.phoneDisplay}</a>
+      </p>
+    )}
+    <!-- Trame de plan discrète -->
+    <svg class="pointer-events-none absolute -right-10 -bottom-10 w-[28rem] text-on-night opacity-[0.06]" viewBox="0 0 200 200" aria-hidden="true">
+      <defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="currentColor" stroke-width="1" /></pattern></defs>
+      <rect width="200" height="200" fill="url(#grid)" />
+    </svg>
+  </div>
+</section>

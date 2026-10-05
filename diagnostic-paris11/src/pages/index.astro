@@ -1,0 +1,229 @@
+---
+/**
+ * Page d'accueil.
+ * Ordre des sections : promesse, réassurance, diagnostics, simulateur,
+ * déroulé, publics, avis, zones, FAQ, appel à l'action final.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import Todo from '@/components/Todo.astro';
+import FacadeBlueprint from '@/components/illustrations/FacadeBlueprint.astro';
+import FloorPlan from '@/components/illustrations/FloorPlan.astro';
+import Reviews from '@/components/Reviews.astro';
+import Faq from '@/components/Faq.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { site } from '@/config/site';
+import { faqSchema } from '@/lib/schema';
+
+const diagnostics = (await getCollection('diagnostics')).sort((a, b) => a.data.order - b.data.order);
+const zones = (await getCollection('zones')).sort((a, b) => a.data.order - b.data.order);
+
+const faq = [
+  {
+    q: 'Quels diagnostics faut-il pour vendre un appartement à Paris ?',
+    a: 'Dans tous les cas : le DPE, l’état des risques (ERP), le mesurage loi Carrez pour un lot de copropriété et, à Paris, l’état relatif à la présence de termites. S’y ajoutent selon le bien : le plomb (immeuble construit avant 1949), l’amiante (permis de construire avant le 1er juillet 1997), l’électricité et le gaz (installations de plus de 15 ans).',
+  },
+  {
+    q: 'Sous quel délai pouvez-vous intervenir ?',
+    a: `Le rendez-vous est généralement fixé ${site.delays.appointment}, selon vos disponibilités et l’accès au logement. Le rapport complet vous est envoyé ${site.delays.report} après la visite, hors analyses de laboratoire éventuelles pour l’amiante.`,
+  },
+  {
+    q: 'Combien coûtent les diagnostics ?',
+    a: 'Le prix dépend de la surface, de l’année de construction et des diagnostics nécessaires. Consultez notre grille indicative ou demandez un devis : il est détaillé, sans engagement, et vous indique exactement les diagnostics requis.',
+  },
+  {
+    q: 'Intervenez-vous en dehors du 11e arrondissement ?',
+    a: 'Oui. Nous intervenons dans tout Paris et en petite couronne : Hauts-de-Seine, Seine-Saint-Denis et Val-de-Marne.',
+  },
+  {
+    q: 'Comment vérifier que le diagnostiqueur est certifié ?',
+    a: 'Chaque diagnostiqueur doit être certifié par un organisme accrédité pour chaque domaine qu’il réalise. Vous pouvez le vérifier gratuitement dans l’annuaire officiel des diagnostiqueurs immobiliers du ministère de la Transition écologique.',
+  },
+  {
+    q: 'Dois-je être présent pendant la visite ?',
+    a: 'Il suffit qu’une personne puisse nous donner accès à toutes les pièces, ainsi qu’aux caves, combles et parkings privatifs. Votre agent immobilier, un proche ou le gardien peuvent vous représenter.',
+  },
+];
+
+const audiences = [
+  { title: 'Particuliers', text: 'Vous vendez ou louez votre logement : nous identifions les diagnostics réellement obligatoires, sans rien ajouter d’inutile.' },
+  { title: 'Agences immobilières', text: 'Des rapports livrés sous 24 h pour publier l’annonce sans attendre, et un interlocuteur joignable.' },
+  { title: 'Syndics et gestionnaires', text: 'Interventions coordonnées dans l’immeuble, accès gardien, planning tenu.' },
+  { title: 'Notaires', text: 'Un dossier de diagnostic technique complet et à jour pour la promesse comme pour l’acte.' },
+  { title: 'Investisseurs', text: 'Une lecture claire du DPE et des obligations de location avant d’acheter ou de remettre en location.' },
+];
+
+const steps = [
+  { title: 'Vous décrivez votre bien', text: 'Type, surface, année de construction, vente ou location : deux minutes en ligne ou par téléphone.' },
+  { title: 'Nous fixons la visite', text: `Devis détaillé et rendez-vous proposé ${site.delays.appointment}.` },
+  { title: 'Nous intervenons', text: 'Un diagnostiqueur certifié réalise tous les diagnostics en une seule visite.' },
+  { title: 'Vous recevez le dossier', text: `Rapports complets ${site.delays.report}, prêts à être transmis au notaire ou annexés au bail.` },
+];
+---
+<BaseLayout
+  title={`Diagnostic immobilier Paris 11e | ${site.name}`}
+  description="Diagnostics immobiliers à Paris 11e et en petite couronne : DPE, amiante, plomb, électricité, gaz, termites, Carrez, ERP. Diagnostiqueur certifié, rapport sous 24 h."
+  schemas={[faqSchema(faq)]}
+>
+  <!-- HERO -->
+  <section class="container-site grid gap-10 pt-10 pb-16 md:pt-16 lg:grid-cols-12 lg:items-center lg:gap-14 lg:pb-24">
+    <div class="lg:col-span-6">
+      <p class="label-sm text-accent">Diagnostiqueur certifié à Paris 11e</p>
+      <h1 class="mt-5 text-[2.75rem] leading-[1.04] md:text-6xl lg:text-[4.1rem]">
+        Vos diagnostics immobiliers, remis <em class="font-medium">sous 24 heures.</em>
+      </h1>
+      <p class="mt-6 max-w-[34rem] text-lg leading-relaxed text-muted md:text-xl">
+        DPE, amiante, plomb, électricité, gaz, termites, Carrez : une seule visite, partout à Paris et en petite couronne.
+      </p>
+      <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+        <a href="/devis/" class="btn btn-primary">Demander un devis <Icon name="arrow-right" class="size-4" /></a>
+        <a href="/rendez-vous/" class="btn btn-ghost">Prendre rendez-vous</a>
+      </div>
+    </div>
+
+    <figure class="rounded-[6px] bg-night p-6 text-on-night md:p-8 lg:col-span-6">
+      <div class="mx-auto max-w-[22rem] lg:max-w-[24rem]"><FacadeBlueprint /></div>
+      <figcaption class="mt-2 grid gap-3 border-t border-white/10 pt-5 text-sm text-on-night-muted sm:grid-cols-3">
+        <p><span class="font-bold text-accent-on-night">1</span> Peintures anciennes : plomb si l’immeuble date d’avant 1949.</p>
+        <p><span class="font-bold text-accent-on-night">2</span> Matériaux : amiante si le permis est antérieur à juillet 1997.</p>
+        <p><span class="font-bold text-accent-on-night">3</span> Installations : électricité et gaz au-delà de 15 ans.</p>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- RÉASSURANCE -->
+  <section aria-label="Nos engagements" class="border-y border-line bg-surface">
+    <ul class="container-site grid divide-line py-2 sm:grid-cols-2 sm:divide-x lg:grid-cols-4">
+      <li class="flex gap-4 py-6 sm:px-6 lg:first:pl-0" data-reveal style="--i:0">
+        <Icon name="seal-check" class="size-7 shrink-0 text-accent" />
+        <div>
+          <p class="font-bold">Diagnostiqueur certifié</p>
+          <p class="mt-1 text-sm text-muted">{site.certification.body ? `Certification ${site.certification.body}` : <Todo label="organisme certificateur" />}</p>
+        </div>
+      </li>
+      <li class="flex gap-4 py-6 sm:px-6" data-reveal style="--i:1">
+        <Icon name="file-text" class="size-7 shrink-0 text-accent" />
+        <div>
+          <p class="font-bold">Rapport sous 24 h</p>
+          <p class="mt-1 text-sm text-muted">Envoyé par e-mail après la visite.</p>
+        </div>
+      </li>
+      <li class="flex gap-4 py-6 sm:px-6" data-reveal style="--i:2">
+        <Icon name="calendar-check" class="size-7 shrink-0 text-accent" />
+        <div>
+          <p class="font-bold">Rendez-vous rapide</p>
+          <p class="mt-1 text-sm text-muted">Généralement {site.delays.appointment}.</p>
+        </div>
+      </li>
+      <li class="flex gap-4 py-6 sm:px-6" data-reveal style="--i:3">
+        <Icon name="map-pin" class="size-7 shrink-0 text-accent" />
+        <div>
+          <p class="font-bold">Paris et petite couronne</p>
+          <p class="mt-1 text-sm text-muted">75, 92, 93 et 94.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- DIAGNOSTICS -->
+  <section aria-labelledby="diag-title" class="container-site py-20 md:py-28">
+    <div class="max-w-2xl">
+      <h2 id="diag-title" class="text-4xl leading-tight md:text-5xl">Les diagnostics que nous réalisons</h2>
+      <p class="mt-4 text-lg text-muted">Pour chaque diagnostic, sa durée de validité en un coup d’œil. Le détail des obligations est sur chaque page.</p>
+    </div>
+    <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {diagnostics.map((d, i) => (
+        <li class:list={[i === 0 && 'sm:col-span-2']} data-reveal style={`--i:${i % 3}`}>
+          <a
+            href={`/diagnostics/${d.id}/`}
+            class:list={[
+              'group flex h-full flex-col rounded-[6px] border p-7 transition-colors duration-300',
+              i === 0 ? 'border-transparent bg-night text-on-night hover:bg-night-2' : 'border-line bg-surface hover:border-line-strong',
+            ]}
+          >
+            <div class="flex items-start justify-between gap-4">
+              <Icon name={d.data.icon} class={`size-8 ${i === 0 ? 'text-accent-on-night' : 'text-accent'}`} />
+              <span class={`text-right text-xs font-semibold ${i === 0 ? 'text-on-night-muted' : 'text-muted'}`}>validité<br /><span class={`font-display text-3xl font-semibold ${i === 0 ? 'text-on-night' : 'text-ink'}`}>{d.data.validityHeadline}</span></span>
+            </div>
+            <h3 class="mt-8 text-[1.75rem] leading-tight">{d.data.shortName}</h3>
+            <p class={`mt-2 leading-relaxed ${i === 0 ? 'text-on-night-muted max-w-lg' : 'text-muted'}`}>{d.data.summary}</p>
+            <span class={`mt-auto inline-flex items-center gap-1 pt-6 text-sm font-semibold ${i === 0 ? 'text-accent-on-night' : 'text-accent'}`}>
+              En savoir plus <Icon name="arrow-right" class="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="mt-6 text-sm text-muted">* Validité illimitée en l’absence d’amiante, ou tant qu’aucuns travaux ne modifient la surface mesurée. Plomb, électricité et gaz : vente / location.</p>
+  </section>
+
+  <!-- SIMULATEUR -->
+  <section aria-labelledby="simu-title" class="bg-surface">
+    <div class="container-site grid gap-12 py-20 md:py-24 lg:grid-cols-2 lg:items-center">
+      <div data-reveal>
+        <h2 id="simu-title" class="text-4xl leading-tight md:text-5xl">Quels diagnostics pour votre bien ?</h2>
+        <p class="mt-5 max-w-lg text-lg text-muted">
+          Quatre questions sur votre logement, et la liste des diagnostics obligatoires s’affiche, avec leur durée de validité. Gratuit et sans inscription.
+        </p>
+        <a href="/quels-diagnostics/" class="btn btn-primary mt-8">Lancer le simulateur <Icon name="arrow-right" class="size-4" /></a>
+      </div>
+      <div class="rounded-[6px] border border-line bg-bg p-6 md:p-10" data-reveal style="--i:1">
+        <FloorPlan />
+      </div>
+    </div>
+  </section>
+
+  <!-- DÉROULÉ -->
+  <section aria-labelledby="process-title" class="container-site py-20 md:py-28">
+    <h2 id="process-title" class="max-w-2xl text-4xl leading-tight md:text-5xl">Comment se passe votre dossier</h2>
+    <ol class="relative mt-14 grid gap-10 md:grid-cols-4 md:gap-8">
+      <span class="absolute top-[0.6rem] right-0 left-0 hidden h-px bg-line-strong md:block" aria-hidden="true"></span>
+      {steps.map((s, i) => (
+        <li class="relative" data-reveal style={`--i:${i}`}>
+          <span class="relative block size-5 rounded-full border-2 border-accent bg-bg" aria-hidden="true"></span>
+          <h3 class="mt-6 text-2xl leading-snug">{s.title}</h3>
+          <p class="mt-2 leading-relaxed text-muted">{s.text}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- POUR QUI -->
+  <section aria-labelledby="public-title" class="border-t border-line">
+    <div class="container-site grid gap-12 py-20 md:py-28 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <h2 id="public-title" class="text-4xl leading-tight md:text-5xl lg:sticky lg:top-28">Pour les particuliers comme pour les professionnels</h2>
+      </div>
+      <dl class="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:col-span-8">
+        {audiences.map((a, i) => (
+          <div class:list={['border-t border-accent/60 pt-5', i === audiences.length - 1 && 'sm:col-span-2 sm:max-w-md']} data-reveal style={`--i:${i % 2}`}>
+            <dt class="text-xl font-bold">{a.title}</dt>
+            <dd class="mt-2 leading-relaxed text-muted">{a.text}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <Reviews />
+
+  <!-- ZONES -->
+  <section aria-labelledby="zones-title" class="bg-night text-on-night">
+    <div class="container-site grid gap-12 py-20 md:py-24 lg:grid-cols-12 lg:items-center">
+      <div class="lg:col-span-5">
+        <h2 id="zones-title" class="text-4xl leading-tight md:text-5xl">Depuis le 11e, dans tout Paris et la petite couronne</h2>
+        <p class="mt-5 text-lg text-on-night-muted">Installés avenue Philippe Auguste, entre Nation et Charonne, nous rejoignons rapidement chaque arrondissement et les communes limitrophes.</p>
+        <a href="/zones/" class="btn btn-night mt-8">Voir les zones desservies</a>
+      </div>
+      <ul class="flex flex-wrap gap-2 lg:col-span-7 lg:justify-end">
+        {zones.map((z) => (
+          <li><a href={`/zones/${z.id}/`} class="inline-flex min-h-11 items-center rounded-full border border-white/20 px-4 text-sm font-medium hover:border-accent-on-night hover:text-accent-on-night">{z.data.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <Faq items={faq} />
+  <CtaBand />
+</BaseLayout>

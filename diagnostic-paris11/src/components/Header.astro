@@ -1,0 +1,74 @@
+---
+import { mainNav, site, phoneHref } from '@/config/site';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+const path = Astro.url.pathname;
+const isActive = (href: string) => path.startsWith(href);
+---
+<header class="sticky top-0 z-40 border-b border-line bg-bg/90 backdrop-blur-md supports-[backdrop-filter]:bg-bg/80">
+  <div class="container-site flex h-[4.5rem] items-center justify-between gap-6">
+    <Logo />
+
+    <nav aria-label="Navigation principale" class="hidden lg:block">
+      <ul class="flex items-center gap-6 text-[0.95rem] font-medium whitespace-nowrap">
+        {mainNav.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={['py-2 transition-colors hover:text-accent', isActive(item.href) ? 'text-accent' : 'text-ink']}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      {site.contact.showPhone && (
+        <a href={phoneHref} class="hidden items-center gap-2 px-2 py-2 font-semibold whitespace-nowrap text-ink hover:text-accent 2xl:inline-flex">
+          <Icon name="phone" class="size-5 text-accent" />{site.contact.phoneDisplay}
+        </a>
+      )}
+      <a href="/devis/" class="btn btn-primary hidden sm:inline-flex">Demander un devis</a>
+      <button
+        type="button"
+        class="inline-flex size-12 items-center justify-center rounded-full border border-line-strong lg:hidden"
+        aria-expanded="false"
+        aria-controls="menu-mobile"
+        data-menu-toggle
+      >
+        <span class="sr-only">Ouvrir le menu</span>
+        <Icon name="list" class="size-6" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Menu mobile -->
+  <div id="menu-mobile" class="hidden border-t border-line bg-bg lg:hidden" data-menu>
+    <nav aria-label="Navigation mobile" class="container-site py-6">
+      <ul class="grid gap-1 text-lg font-medium">
+        {mainNav.map((item) => (
+          <li><a href={item.href} class="block rounded-[6px] px-2 py-3 hover:bg-surface" aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+        <li><a href="/rendez-vous/" class="block rounded-[6px] px-2 py-3 hover:bg-surface">Prendre rendez-vous</a></li>
+        <li><a href="/contact/" class="block rounded-[6px] px-2 py-3 hover:bg-surface">Contact</a></li>
+      </ul>
+      <a href="/devis/" class="btn btn-primary mt-6 w-full">Demander un devis</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Ouverture / fermeture du menu mobile (accessible au clavier, touche Échap).
+  const btn = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  if (btn && menu) {
+    const set = (open: boolean) => {
+      btn.setAttribute('aria-expanded', String(open));
+      btn.querySelector('.sr-only')!.textContent = open ? 'Fermer le menu' : 'Ouvrir le menu';
+      menu.classList.toggle('hidden', !open);
+    };
+    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') set(false); });
+  }
+</script>

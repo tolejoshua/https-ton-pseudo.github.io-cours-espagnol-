@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import CtaBand from '@/components/CtaBand.astro';
+
+const diagnostics = (await getCollection('diagnostics')).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout
+  title="Diagnostics immobiliers à Paris : liste, obligations, validité"
+  description="DPE, amiante, plomb, électricité, gaz, termites, Carrez, ERP : obligations à la vente et à la location et durées de validité. Diagnostiqueur certifié à Paris 11e."
+  breadcrumbs={[{ name: 'Diagnostics', href: '/diagnostics/' }]}
+>
+  <section class="container-site pt-10 pb-12 md:pt-14">
+    <h1 class="max-w-3xl text-5xl leading-[1.05] md:text-6xl">Les diagnostics immobiliers</h1>
+    <p class="mt-6 max-w-2xl text-lg text-muted">
+      Pour vendre ou louer, la loi impose un dossier de diagnostic technique. Sa composition dépend de l’année de construction, de l’âge des installations et du type d’opération.
+    </p>
+  </section>
+
+  <section class="container-site pb-20">
+    <div class="overflow-x-auto rounded-[6px] border border-line bg-surface">
+      <table class="w-full min-w-[44rem] text-left">
+        <caption class="sr-only">Obligations et validité des diagnostics à la vente et à la location</caption>
+        <thead class="text-sm text-muted">
+          <tr class="border-b border-line-strong">
+            <th scope="col" class="px-6 py-4 font-semibold">Diagnostic</th>
+            <th scope="col" class="px-6 py-4 font-semibold">Biens concernés</th>
+            <th scope="col" class="px-6 py-4 font-semibold">Vente</th>
+            <th scope="col" class="px-6 py-4 font-semibold">Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          {diagnostics.map((d) => (
+            <tr class="border-b border-line align-top last:border-0">
+              <th scope="row" class="px-6 py-5">
+                <a href={`/diagnostics/${d.id}/`} class="group inline-flex items-center gap-3 font-semibold hover:text-accent">
+                  <Icon name={d.data.icon} class="size-6 shrink-0 text-accent" />
+                  <span>{d.data.shortName}</span>
+                </a>
+              </th>
+              <td class="px-6 py-5 text-sm leading-relaxed text-muted">{d.data.concerned}</td>
+              <td class="px-6 py-5 text-sm leading-relaxed">{d.data.sale}</td>
+              <td class="px-6 py-5 text-sm leading-relaxed">{d.data.rental}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-6 text-muted">
+      Vous ne savez pas lesquels s’appliquent à votre bien ?
+      <a href="/quels-diagnostics/" class="link font-semibold">Utilisez le simulateur</a>.
+    </p>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

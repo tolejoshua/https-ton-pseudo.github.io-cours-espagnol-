@@ -1,0 +1,9 @@
+---
+/**
+ * Repère jaune « À CONFIRMER » : signale une information manquante.
+ * Il disparaît dès que la valeur est renseignée dans src/config/site.ts.
+ */
+interface Props { label: string }
+const { label } = Astro.props;
+---
+<span class="todo" data-todo>[À confirmer : {label}]</span>

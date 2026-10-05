@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import { site } from '@/config/site';
+
+const posts = (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) => +b.data.date - +a.data.date);
+const fmt = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+const [first, ...rest] = posts;
+---
+<BaseLayout
+  title={`Conseils diagnostics immobiliers à Paris | ${site.name}`}
+  description="DPE, validité des diagnostics, Carrez, vente et location à Paris : nos guides pratiques pour préparer sereinement votre transaction immobilière."
+  breadcrumbs={[{ name: 'Conseils', href: '/blog/' }]}
+>
+  <section class="container-site pt-10 pb-12 md:pt-14">
+    <h1 class="max-w-3xl text-5xl leading-[1.05] md:text-6xl">Conseils et réglementation</h1>
+    <p class="mt-6 max-w-2xl text-lg text-muted">Des guides pratiques, à jour, pour vendre ou louer à Paris en connaissant vos obligations.</p>
+  </section>
+
+  {first && (
+    <section class="container-site pb-10">
+      <a href={`/blog/${first.id}/`} class="group grid gap-6 rounded-[6px] bg-night p-8 text-on-night md:grid-cols-12 md:p-12">
+        <div class="md:col-span-8">
+          <p class="text-sm text-on-night-muted"><time datetime={first.data.date.toISOString()}>{fmt.format(first.data.date)}</time></p>
+          <h2 class="mt-3 text-4xl leading-tight group-hover:text-accent-on-night md:text-5xl">{first.data.title}</h2>
+          <p class="mt-4 max-w-2xl text-on-night-muted">{first.data.description}</p>
+        </div>
+        <div class="flex items-end md:col-span-4 md:justify-end">
+          <span class="inline-flex items-center gap-2 font-semibold text-accent-on-night">Lire l’article <Icon name="arrow-right" class="size-4 transition-transform group-hover:translate-x-1" /></span>
+        </div>
+      </a>
+    </section>
+  )}
+
+  <section class="container-site pb-24">
+    <ul class="grid gap-x-10 md:grid-cols-2">
+      {rest.map((p, i) => (
+        <li class="border-t border-line" data-reveal style={`--i:${i % 2}`}>
+          <a href={`/blog/${p.id}/`} class="group block py-8">
+            <p class="text-sm text-muted"><time datetime={p.data.date.toISOString()}>{fmt.format(p.data.date)}</time>{p.data.tags.length > 0 && <> · {p.data.tags[0]}</>}</p>
+            <h2 class="mt-2 text-3xl leading-tight group-hover:text-accent">{p.data.title}</h2>
+            <p class="mt-3 text-muted">{p.data.description}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

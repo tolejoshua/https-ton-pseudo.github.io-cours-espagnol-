@@ -1,0 +1,38 @@
+---
+/**
+ * Conditions générales de vente : MODÈLE à faire valider par un professionnel du droit.
+ */
+import LegalPage from '@/components/legal/LegalPage.astro';
+import Todo from '@/components/Todo.astro';
+import { site } from '@/config/site';
+---
+<LegalPage title="Conditions générales de vente" description={`Conditions générales de vente des prestations de diagnostic immobilier de ${site.name}.`} path="/cgv/" updated="5 octobre 2026">
+  <p><Todo label="modèle à faire relire et valider par un juriste avant publication" /></p>
+
+  <h2>1. Objet</h2>
+  <p>Les présentes conditions régissent les prestations de diagnostic immobilier réalisées par {site.legal.companyName ?? site.name} (ci-après « le cabinet ») pour ses clients particuliers et professionnels.</p>
+
+  <h2>2. Devis et commande</h2>
+  <p>Chaque prestation fait l’objet d’un devis préalable précisant les diagnostics, le prix et les conditions d’intervention. La commande est formée par l’acceptation écrite du devis (signature, e-mail ou validation en ligne).</p>
+
+  <h2>3. Prix et paiement</h2>
+  <p>Les prix sont indiqués en euros toutes taxes comprises. <Todo label="modalités de paiement : moment du règlement, moyens acceptés" /> Les rapports sont remis à réception du paiement, sauf accord contraire.</p>
+
+  <h2>4. Obligations du client</h2>
+  <p>Le client permet l’accès à l’ensemble des locaux et dépendances (caves, combles, parkings) et transmet les informations et documents utiles : année du permis de construire, justificatifs de travaux, anciens diagnostics. Les installations de gaz et d’électricité doivent être alimentées le jour de la visite. Les parties non accessibles ne peuvent être diagnostiquées et sont mentionnées dans le rapport.</p>
+
+  <h2>5. Exécution et remise des rapports</h2>
+  <p>Le cabinet réalise les diagnostics conformément aux normes et à la réglementation en vigueur. Les rapports sont transmis par voie électronique, en principe {site.delays.report} après la visite, hors délais d’analyse en laboratoire.</p>
+
+  <h2>6. Droit de rétractation (clients consommateurs)</h2>
+  <p>Pour un contrat conclu à distance ou hors établissement, le client consommateur dispose d’un délai de 14 jours pour se rétracter, sans motif. S’il demande expressément que la prestation commence avant la fin de ce délai, il reste redevable du montant correspondant au service fourni jusqu’à sa rétractation ; il perd son droit de rétractation lorsque la prestation a été pleinement exécutée.</p>
+
+  <h2>7. Responsabilité et assurance</h2>
+  <p>Le cabinet est titulaire d’une assurance de responsabilité civile professionnelle : {site.insurance.insurer ?? <Todo label="assureur" />}{site.insurance.policyNumber ? `, contrat n° ${site.insurance.policyNumber}` : ''}.</p>
+
+  <h2>8. Réclamations et médiation</h2>
+  <p>Toute réclamation peut être adressée au cabinet par écrit. En cas de litige non résolu, le client consommateur peut recourir gratuitement au médiateur de la consommation : {site.legal.mediator ? <a href={site.legal.mediator.url} rel="noopener">{site.legal.mediator.name}</a> : <Todo label="nom et site du médiateur de la consommation (obligatoire)" />}.</p>
+
+  <h2>9. Droit applicable</h2>
+  <p>Les présentes conditions sont soumises au droit français.</p>
+</LegalPage>
