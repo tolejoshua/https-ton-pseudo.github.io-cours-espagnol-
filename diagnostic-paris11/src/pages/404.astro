@@ -1,0 +1,14 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { site } from '@/config/site';
+---
+<BaseLayout title={`Page introuvable | ${site.name}`} description="Cette page n’existe pas ou a été déplacée." noindex hero={{ title: 'Page <em>introuvable</em>', lead: 'Erreur 404 : cette page n’existe pas ou a été déplacée.' }}>
+  <section class="container-site max-w-3xl py-16 md:py-20">
+    <p class="text-lg text-muted">Elle a peut-être été déplacée. Voici quelques pistes :</p>
+    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+      <a href="/" class="btn btn-primary">Accueil</a>
+      <a href="/diagnostics/" class="btn btn-ghost">Nos diagnostics</a>
+      <a href="/devis/" class="btn btn-ghost">Demander un devis</a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,111 @@
+---
+/**
+ * Formulaire de demande de devis, traité par Netlify Forms.
+ * Les demandes arrivent dans Netlify (Forms > devis) et par e-mail
+ * une fois la notification configurée (voir README).
+ */
+import { getCollection } from 'astro:content';
+import ConsentAndSubmit from './ConsentAndSubmit.astro';
+const diagnostics = (await getCollection('diagnostics')).sort((a, b) => a.data.order - b.data.order);
+---
+<form name="devis" method="POST" action="/merci/" data-netlify="true" netlify-honeypot="bot-field" class="grid gap-8" data-enhance data-prefill>
+  <input type="hidden" name="form-name" value="devis" />
+
+  <fieldset class="grid gap-3">
+    <legend class="mb-3 font-semibold">Vous souhaitez</legend>
+    <div class="flex flex-wrap gap-2">
+      <span class="relative"><input class="chip-input" type="radio" id="op-vente" name="operation" value="vente" required checked /><label class="chip" for="op-vente">Vendre</label></span>
+      <span class="relative"><input class="chip-input" type="radio" id="op-location" name="operation" value="location" /><label class="chip" for="op-location">Louer</label></span>
+      <span class="relative"><input class="chip-input" type="radio" id="op-autre" name="operation" value="autre" /><label class="chip" for="op-autre">Autre (travaux, copropriété…)</label></span>
+    </div>
+  </fieldset>
+
+  <div class="grid gap-6 sm:grid-cols-2">
+    <div class="field">
+      <label for="bien">Type de bien</label>
+      <select id="bien" name="bien" class="input" required>
+        <option value="appartement">Appartement</option>
+        <option value="maison">Maison</option>
+        <option value="local">Local commercial ou professionnel</option>
+        <option value="immeuble">Immeuble entier</option>
+        <option value="autre">Autre</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="surface">Surface approximative (m²)</label>
+      <input id="surface" name="surface" type="number" inputmode="numeric" min="1" max="5000" class="input" required placeholder="ex. 45" />
+    </div>
+    <div class="field">
+      <label for="annee">Année de construction</label>
+      <select id="annee" name="annee_construction" class="input" required>
+        <option value="">Choisir…</option>
+        <option>Avant 1949</option>
+        <option>Entre 1949 et juin 1997</option>
+        <option>Après juillet 1997</option>
+        <option>Je ne sais pas</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="delai">Délai souhaité</label>
+      <select id="delai" name="delai" class="input" required>
+        <option>Dès que possible</option>
+        <option>Dans les 15 jours</option>
+        <option>Dans le mois</option>
+        <option>Pas de date fixée</option>
+      </select>
+    </div>
+    <div class="field sm:col-span-2">
+      <label for="adresse">Adresse du bien</label>
+      <input id="adresse" name="adresse" type="text" autocomplete="street-address" class="input" required placeholder="Numéro, rue, code postal, ville" />
+    </div>
+  </div>
+
+  <fieldset class="grid gap-3" id="diags" data-require-one data-error="Cochez au moins un diagnostic, ou « Je ne sais pas ».">
+    <legend class="mb-1 font-semibold">Diagnostics souhaités</legend>
+    <p class="help mb-2">Cochez ceux que vous connaissez. Dans le doute, nous vous conseillons.</p>
+    <div class="flex flex-wrap gap-2">
+      {diagnostics.map((d) => (
+        <span class="relative">
+          <input class="chip-input" type="checkbox" id={`diag-${d.id}`} name="diagnostics" value={d.id} />
+          <label class="chip" for={`diag-${d.id}`}>{d.data.shortName}</label>
+        </span>
+      ))}
+      <span class="relative">
+        <input class="chip-input" type="checkbox" id="diag-conseil" name="diagnostics" value="conseil" />
+        <label class="chip" for="diag-conseil">Je ne sais pas, conseillez-moi</label>
+      </span>
+    </div>
+  </fieldset>
+
+  <div class="grid gap-6 sm:grid-cols-2">
+    <div class="field">
+      <label for="profil">Vous êtes</label>
+      <select id="profil" name="profil" class="input">
+        <option>Particulier</option>
+        <option>Agence immobilière</option>
+        <option>Syndic ou gestionnaire</option>
+        <option>Notaire</option>
+        <option>Investisseur</option>
+        <option>Autre professionnel</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="nom">Nom et prénom</label>
+      <input id="nom" name="nom" type="text" autocomplete="name" class="input" required minlength="2" />
+    </div>
+    <div class="field">
+      <label for="tel">Téléphone</label>
+      <input id="tel" name="telephone" type="tel" autocomplete="tel" inputmode="tel" class="input" required pattern="^(\+33\s?|0)[1-9]([\s.\-]?\d{2}){4}$" data-error="Saisissez un numéro français, ex. 06 12 34 56 78." placeholder="06 12 34 56 78" />
+    </div>
+    <div class="field">
+      <label for="email">E-mail</label>
+      <input id="email" name="email" type="email" autocomplete="email" class="input" required data-error="Saisissez une adresse e-mail valide." placeholder="vous@exemple.fr" />
+    </div>
+    <div class="field sm:col-span-2">
+      <label for="message">Précisions <span class="font-normal text-muted">(facultatif)</span></label>
+      <textarea id="message" name="message" rows="4" class="input" placeholder="Accès, étage, cave ou parking, anciens diagnostics disponibles…"></textarea>
+    </div>
+  </div>
+
+  <ConsentAndSubmit label="Envoyer ma demande de devis" formName="devis" />
+</form>

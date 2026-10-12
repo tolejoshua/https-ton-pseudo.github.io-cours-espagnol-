@@ -1,0 +1,36 @@
+---
+/**
+ * Encart brun « texte + photo » (bloc « Property management » de la maquette),
+ * utilisé comme appel à l'action en bas de page.
+ */
+import { Image } from 'astro:assets';
+import { site, phoneHref } from '@/config/site';
+import { photos } from '@/lib/photos';
+import Icon from './Icon.astro';
+interface Props { title?: string; text?: string; image?: ImageMetadata }
+const {
+  title = 'Un diagnostic <em>à prévoir ?</em>',
+  text = `Décrivez votre bien en deux minutes. Nous vous répondons avec un devis détaillé et une date d’intervention, généralement ${site.delays.appointment}.`,
+  image = photos.cabinetLumiere,
+} = Astro.props;
+---
+<section class="container-site pb-16 md:pb-24">
+  <div class="grid overflow-hidden rounded-[22px] bg-brown text-white md:grid-cols-2" data-reveal>
+    <div class="flex flex-col justify-between gap-10 p-7 md:p-12">
+      <div>
+        <h2 class="text-[2.6rem] md:text-[3.6rem]" set:html={title} />
+        <p class="mt-5 max-w-md text-sm leading-relaxed text-on-night-muted md:text-[0.95rem]">{text}</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="/devis/" class="btn btn-white">Demander un devis</a>
+        <a href="/rendez-vous/" class="btn btn-night">Prendre rendez-vous</a>
+        {site.contact.showPhone && (
+          <a href={phoneHref} class="inline-flex items-center gap-2 px-2 text-sm text-on-night-muted hover:text-white"><Icon name="phone" class="size-4" />{site.contact.phoneDisplay}</a>
+        )}
+      </div>
+    </div>
+    <div class="relative min-h-[260px] md:min-h-[420px]">
+      <Image src={image} alt="" widths={[480, 800, 1100]} sizes="(min-width: 768px) 50vw, 100vw" class="absolute inset-0 h-full w-full object-cover" />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,24 @@
+---
+/** Champ anti-spam invisible, consentement RGPD et bouton d'envoi, communs aux formulaires. */
+interface Props { label: string; formName: string }
+const { label, formName } = Astro.props;
+---
+<!-- Piège anti-robots : invisible pour les humains, rempli par les robots -->
+<p class="hidden" aria-hidden="true">
+  <label>Ne pas remplir <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+</p>
+
+<div class="field">
+  <div class="flex items-start gap-3">
+    <input id={`${formName}-consent`} name="consentement" type="checkbox" required value="oui" class="mt-1 size-5 shrink-0 accent-[var(--accent)]" />
+    <label for={`${formName}-consent`} class="text-sm font-normal leading-relaxed text-muted">
+      J’accepte que mes données soient utilisées pour traiter ma demande. Elles ne sont ni revendues ni utilisées à d’autres fins.{' '}
+      <a href="/confidentialite/" class="link">Politique de confidentialité</a>.
+    </label>
+  </div>
+</div>
+
+<div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+  <button type="submit" class="btn btn-primary">{label}</button>
+  <p class="text-sm text-muted">Nous revenons vers vous avec une réponse détaillée.</p>
+</div>

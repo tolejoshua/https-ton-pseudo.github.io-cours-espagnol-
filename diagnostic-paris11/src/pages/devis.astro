@@ -1,0 +1,41 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { photos } from '@/lib/photos';
+import QuoteForm from '@/components/forms/QuoteForm.astro';
+import Icon from '@/components/Icon.astro';
+import { site, phoneHref } from '@/config/site';
+---
+<BaseLayout
+  title={`Devis diagnostic immobilier Paris | ${site.name}`}
+  description="Demandez un devis pour vos diagnostics immobiliers à Paris et en petite couronne : DPE, amiante, plomb, électricité, gaz, termites, Carrez. Réponse détaillée."
+  breadcrumbs={[{ name: 'Demande de devis', href: '/devis/' }]}
+  hero={{ title: 'Demande <em>de devis</em>', lead: 'Deux minutes suffisent. Nous vous répondons avec la liste exacte des diagnostics nécessaires, le prix et une date d’intervention.', image: photos.pageDevis }}
+>
+  <section class="container-site grid gap-12 py-16 md:py-20 lg:grid-cols-12">
+    <div class="lg:col-span-4">
+      <p class="label-sm">Nos engagements</p>
+      <ul class="mt-5 grid gap-4 text-muted">
+        <li class="flex gap-3"><Icon name="check" class="mt-0.5 size-5 shrink-0 text-accent" />Sans engagement</li>
+        <li class="flex gap-3"><Icon name="check" class="mt-0.5 size-5 shrink-0 text-accent" />Rendez-vous généralement {site.delays.appointment}</li>
+        <li class="flex gap-3"><Icon name="check" class="mt-0.5 size-5 shrink-0 text-accent" />Rapports remis {site.delays.report}</li>
+      </ul>
+      {site.contact.showPhone && (
+        <p class="mt-10 border-t border-line pt-6 text-muted">
+          Par téléphone :<br />
+          <a href={phoneHref} class="text-[2rem] font-light italic tracking-[-0.03em] text-ink hover:underline">{site.contact.phoneDisplay}</a>
+        </p>
+      )}
+    </div>
+    <div class="rounded-[16px] border border-line bg-surface p-6 md:p-10 lg:col-span-8">
+      <QuoteForm />
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { enhanceForm, prefillFromUrl } from '@/scripts/forms';
+  document.querySelectorAll<HTMLFormElement>('form[data-enhance]').forEach((f) => {
+    if (f.hasAttribute('data-prefill')) prefillFromUrl(f);
+    enhanceForm(f);
+  });
+</script>

@@ -1,0 +1,85 @@
+---
+/**
+ * Page « Le cabinet ». Les textes biographiques sont volontairement
+ * laissés à compléter : aucune information n'est inventée.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import Todo from '@/components/Todo.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { photos } from '@/lib/photos';
+import { site } from '@/config/site';
+
+const commitments = [
+  { icon: 'file-text', title: 'Rapport sous 24 h', text: 'Les rapports sont envoyés par e-mail dans les 24 heures qui suivent la visite, hors analyses de laboratoire.' },
+  { icon: 'calendar-check', title: 'Rendez-vous rapide', text: `Une intervention généralement ${site.delays.appointment}, adaptée à vos contraintes d’accès.` },
+  { icon: 'clipboard-text', title: 'Uniquement l’utile', text: 'Nous vérifions l’année du permis, l’âge des installations et vos anciens rapports pour ne réaliser que les diagnostics nécessaires.' },
+  { icon: 'shield-check', title: 'Indépendance', text: 'Comme l’exige la loi, le diagnostiqueur n’a aucun lien avec le vendeur, le bailleur, l’agence ou une entreprise de travaux.' },
+];
+---
+<BaseLayout
+  title={`Le cabinet | ${site.name}, diagnostiqueur certifié Paris 11e`}
+  description="Cabinet de diagnostic immobilier installé avenue Philippe Auguste, Paris 11e : diagnostiqueur certifié et assuré, rapports sous 24 h, interventions dans Paris et la petite couronne."
+  breadcrumbs={[{ name: 'Le cabinet', href: '/a-propos/' }]}
+  hero={{ title: 'Un cabinet de quartier, <em>des diagnostics rigoureux</em>', lead: `Installé au ${site.address.street}, entre Nation et Charonne, ${site.name} réalise les diagnostics immobiliers obligatoires pour la vente et la location, dans tout Paris et la petite couronne.`, image: photos.pageCabinet }}
+>
+  <section class="container-site grid gap-12 py-16 md:py-20 lg:grid-cols-12 lg:items-center">
+    <div class="lg:col-span-6">
+      <p class="label-sm">Notre histoire</p>
+      <p class="mt-4 text-[1.6rem] leading-[1.3] tracking-[-0.02em] md:text-[2rem]">
+        <Todo label="2 ou 3 phrases sur l’histoire du cabinet : année de création, parcours du diagnostiqueur" />
+      </p>
+    </div>
+    <!-- Emplacement photo : remplacer par une vraie photo du diagnostiqueur (format 4:5, 1200 × 1500 px) -->
+    <figure class="lg:col-span-6">
+      <div class="flex aspect-[4/5] max-h-[34rem] w-full items-end rounded-[16px] bg-surface p-6">
+        <p class="text-sm"><span class="todo">[À confirmer : photo réelle du diagnostiqueur, 1200 × 1500 px]</span></p>
+      </div>
+    </figure>
+  </section>
+
+  <section class="border-y border-line bg-surface" aria-labelledby="engagements">
+    <div class="container-site py-16 md:py-20">
+      <h2 id="engagements" class="text-4xl leading-tight md:text-5xl">Nos engagements</h2>
+      <ul class="mt-12 grid gap-10 md:grid-cols-2">
+        {commitments.map((c, i) => (
+          <li class="flex gap-5" data-reveal style={`--i:${i % 2}`}>
+            <Icon name={c.icon} class="size-8 shrink-0 text-accent" />
+            <div>
+              <h3 class="text-2xl">{c.title}</h3>
+              <p class="mt-2 leading-relaxed text-muted">{c.text}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="container-site grid gap-10 py-20 md:py-24 lg:grid-cols-12" aria-labelledby="certif">
+    <h2 id="certif" class="text-4xl leading-tight md:text-5xl lg:col-span-5">Certification et assurance</h2>
+    <div class="lg:col-span-7">
+      <p class="text-lg leading-relaxed text-muted">
+        Un diagnostiqueur immobilier doit être certifié par un organisme accrédité par le Cofrac, pour chaque domaine qu’il réalise, et souscrire une assurance de responsabilité civile professionnelle.
+      </p>
+      <dl class="mt-8 grid gap-5">
+        <div class="border-t border-line pt-5">
+          <dt class="text-sm font-semibold text-muted">Organisme certificateur</dt>
+          <dd class="mt-1 text-lg">{site.certification.body ?? <Todo label="organisme certificateur" />}</dd>
+        </div>
+        <div class="border-t border-line pt-5">
+          <dt class="text-sm font-semibold text-muted">Numéro de certificat</dt>
+          <dd class="mt-1 text-lg">{site.certification.number ?? <Todo label="numéro de certificat et domaines certifiés" />}</dd>
+        </div>
+        <div class="border-t border-line pt-5">
+          <dt class="text-sm font-semibold text-muted">Assurance RCP</dt>
+          <dd class="mt-1 text-lg">{site.insurance.insurer ? `${site.insurance.insurer}${site.insurance.policyNumber ? `, contrat n° ${site.insurance.policyNumber}` : ''}` : <Todo label="assureur et numéro de contrat" />}</dd>
+        </div>
+      </dl>
+      <a href={site.certification.directoryUrl} target="_blank" rel="noopener" class="link mt-8 inline-flex items-center gap-1 font-semibold">
+        Vérifier dans l’annuaire officiel des diagnostiqueurs <Icon name="arrow-up-right" class="size-4" />
+      </a>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

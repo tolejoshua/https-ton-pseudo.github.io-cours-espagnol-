@@ -1,0 +1,424 @@
+/*
+ * Feuille de style globale : Tailwind CSS v4 + jetons du système de design.
+ *
+ * Système de design (inspiré de la maquette de référence fournie) :
+ * - Typographie : Inter Tight (grotesque principale), accents en
+ *   Instrument Serif italique via <em> dans les titres.
+ * - Couleurs : blanc, noir presque pur, gris doux, un seul accent : brun chaud.
+ * - Formes : cadres photo arrondis (22 px), cartes 16 px, boutons et
+ *   étiquettes en pilule. Aucune ombre portée.
+ * - Signatures : onglets blancs « découpés » dans le haut des photos,
+ *   barre de recherche en pilule, cartes photo en escalier.
+ */
+@import 'tailwindcss';
+
+:root {
+  --bg: #ffffff;
+  --surface: #f4f4f2;
+  --surface-2: #ebebe8;
+  --ink: #121212;
+  --muted: #6b6b6b;
+  --line: #e6e6e3;
+  --line-strong: #cfcfcb;
+  /* Accent unique : brun chaud (grand encart sombre de la maquette) */
+  --brown: #33251d;
+  --brown-2: #4a382c;
+  --on-dark: #ffffff;
+  --on-dark-muted: rgb(255 255 255 / 0.74);
+  --cream: #eadccd;
+  --todo-bg: #fff1b8;
+  --todo-ink: #5c4300;
+  color-scheme: light;
+}
+
+@theme {
+  --font-sans: 'Inter Tight Variable', 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Inter Tight Variable', 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', 'Times New Roman', serif;
+
+  /* Noms conservés pour compatibilité avec les pages existantes */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--ink);
+  --color-accent-hover: #000000;
+  --color-accent-ink: #ffffff;
+  --color-night: var(--brown);
+  --color-night-2: var(--brown-2);
+  --color-on-night: var(--on-dark);
+  --color-on-night-muted: var(--on-dark-muted);
+  --color-accent-on-night: var(--cream);
+  --color-brown: var(--brown);
+  --color-cream: var(--cream);
+
+  --radius-card: 16px;
+  --radius-frame: 22px;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ------------------------------------------------------------------ Base */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 2rem;
+  }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-tap-highlight-color: transparent;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+  h3 { letter-spacing: -0.02em; line-height: 1.15; }
+  /* Mot d'accent en serif italique : <h2>Nos <em>diagnostics</em></h2> */
+  h1 em, h2 em, h3 em, .serif-em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    font-size: 1.04em;
+  }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--ink); color: #fff; }
+
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+}
+
+/* ------------------------------------------------------------ Composants */
+@layer components {
+  .container-site {
+    width: 100%;
+    max-width: 82rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-site { padding-inline: 2.5rem; }
+  }
+
+  /* Petite étiquette grise (« About Us » dans la maquette) */
+  .label-sm {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--muted);
+  }
+
+  /* Boutons en pilule : noir plein, blanc plein, contour */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.7rem 1.35rem;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    transition: background-color 0.25s var(--ease-out-expo), color 0.25s, border-color 0.25s, transform 0.15s;
+    user-select: none;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary { background: var(--ink); color: #fff; }
+  .btn-primary:hover { background: #000; }
+  .btn-ghost { border: 1px solid var(--line-strong); color: var(--ink); background: transparent; }
+  .btn-ghost:hover { border-color: var(--ink); }
+  .btn-white { background: #fff; color: var(--ink); }
+  .btn-white:hover { background: var(--surface); }
+  .btn-night { border: 1px solid rgb(255 255 255 / 0.4); color: #fff; }
+  .btn-night:hover { border-color: #fff; background: rgb(255 255 255 / 0.08); }
+  .btn-block { width: 100%; }
+
+  /* Bouton rond avec flèche (carte « Designer apartments ») */
+  .round-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--ink);
+    transition: transform 0.3s var(--ease-out-expo);
+  }
+
+  /* Étiquettes noires (« 2 bedrooms ») */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  .tag-light { background: var(--surface); color: var(--ink); }
+  .tag-glass { background: rgb(255 255 255 / 0.16); color: #fff; backdrop-filter: blur(8px); }
+
+  .link {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .link:hover { text-decoration-thickness: 2px; }
+
+  /* Repère visible pour une information à confirmer */
+  .todo {
+    display: inline;
+    background: var(--todo-bg);
+    color: var(--todo-ink);
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-size: 0.8em;
+    font-weight: 600;
+    letter-spacing: 0;
+    padding: 0.05em 0.4em;
+    border-radius: 4px;
+    box-decoration-break: clone;
+  }
+
+  /* ---------- Cadre photo arrondi + onglets découpés (signature) ---------- */
+  .frame {
+    position: relative;
+    margin: 0.75rem;
+    border-radius: var(--radius-frame);
+    overflow: hidden;
+    background: var(--brown);
+    color: #fff;
+    isolation: isolate;
+  }
+  /* Les onglets d'angle recouvrent les coins supérieurs : on les met à angle droit
+     pour éviter le liseré d'anticrénelage de l'arrondi (blanc sur blanc, invisible). */
+  .frame-tabs { border-top-left-radius: 0; border-top-right-radius: 0; }
+  .frame-media { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; }
+  .frame-shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, rgb(10 10 10 / 0.42) 0%, rgb(10 10 10 / 0.08) 38%, rgb(10 10 10 / 0.0) 60%, rgb(10 10 10 / 0.28) 100%),
+      linear-gradient(90deg, rgb(10 10 10 / 0.32) 0%, rgb(10 10 10 / 0) 55%);
+  }
+
+  /* En-têtes de page : voile plus marqué pour garantir le contraste du texte blanc */
+  .frame-shade-strong {
+    background:
+      linear-gradient(90deg, rgb(12 10 9 / 0.72) 0%, rgb(12 10 9 / 0.5) 45%, rgb(12 10 9 / 0.15) 100%),
+      linear-gradient(0deg, rgb(12 10 9 / 0.35) 0%, rgb(12 10 9 / 0) 50%);
+  }
+
+  /* Onglet blanc suspendu au bord supérieur, avec congés concaves */
+  .notch {
+    position: absolute;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    height: 2.6rem;
+    padding: 0 0.6rem;
+    background: var(--bg);
+    color: var(--ink);
+  }
+  .notch::before, .notch::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 16px;
+    height: 16px;
+  }
+  .notch-center { left: 50%; transform: translateX(-50%); border-radius: 0 0 16px 16px; }
+  .notch-center::before { left: -16px; background: radial-gradient(circle at 0 100%, transparent 15.5px, var(--bg) 16px); }
+  .notch-center::after { right: -16px; background: radial-gradient(circle at 100% 100%, transparent 15.5px, var(--bg) 16px); }
+  .notch-left { left: 0; border-radius: 0 0 16px 0; padding-left: 1rem; }
+  .notch-left::before { display: none; }
+  .notch-left::after { right: -16px; background: radial-gradient(circle at 100% 100%, transparent 15.5px, var(--bg) 16px); }
+  .notch-right { right: 0; border-radius: 0 0 0 16px; padding-right: 0.75rem; }
+  .notch-right::after { display: none; }
+  .notch-right::before { left: -16px; background: radial-gradient(circle at 0 100%, transparent 15.5px, var(--bg) 16px); }
+  /* congé sous l'onglet d'angle (côté intérieur de la photo) */
+  .notch-left > .notch-foot, .notch-right > .notch-foot {
+    position: absolute;
+    top: 100%;
+    width: 16px;
+    height: 16px;
+  }
+  .notch-left > .notch-foot { left: 0; background: radial-gradient(circle at 100% 100%, transparent 15.5px, var(--bg) 16px); }
+  .notch-right > .notch-foot { right: 0; background: radial-gradient(circle at 0 100%, transparent 15.5px, var(--bg) 16px); }
+  .notch a.nav-link {
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+  }
+  .notch a.nav-link:hover, .notch a.nav-link[aria-current='page'] { background: var(--surface); }
+
+  /* Barre de recherche blanche en pilule (bas du visuel d'accueil) */
+  .searchbar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    gap: 0.25rem;
+    background: #fff;
+    color: var(--ink);
+    border-radius: 1.25rem;
+    padding: 0.5rem;
+  }
+  @media (min-width: 900px) {
+    .searchbar { grid-template-columns: repeat(4, minmax(0, 1fr)) auto; border-radius: 999px; padding: 0.45rem 0.45rem 0.45rem 0.75rem; }
+  }
+  .searchbar > button { grid-column: 1 / -1; }
+  @media (min-width: 900px) { .searchbar > button { grid-column: auto; } }
+  .searchbar-field { position: relative; display: flex; align-items: center; gap: 0.6rem; min-width: 0; padding: 0.35rem 0.5rem; border-radius: 999px; }
+  .searchbar-field:hover { background: var(--surface); }
+  .searchbar-icon { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 2.2rem; height: 2.2rem; border-radius: 999px; background: var(--surface); }
+  @media (max-width: 639px) { .searchbar-icon { display: none; } }
+  .searchbar-label { display: block; font-size: 0.68rem; color: var(--muted); line-height: 1.2; }
+  .searchbar select {
+    display: block;
+    width: 100%;
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0 1rem 0 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    line-height: 1.35;
+  }
+  .searchbar select:focus { outline: none; }
+  .searchbar-field:focus-within { outline: 2px solid var(--ink); outline-offset: -2px; }
+
+  /* Contenu Markdown (pages diagnostics, articles, zones) */
+  .prose-site { max-width: 68ch; font-size: 1rem; line-height: 1.75; color: #2b2b2b; }
+  .prose-site > * + * { margin-top: 1.1em; }
+  .prose-site h2 { font-size: 2.1rem; line-height: 1.1; margin-top: 2.1em; color: var(--ink); }
+  .prose-site h3 { font-size: 1.35rem; line-height: 1.25; margin-top: 1.7em; color: var(--ink); }
+  .prose-site a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .prose-site ul, .prose-site ol { padding-left: 1.25em; }
+  .prose-site ul { list-style: none; padding-left: 0; }
+  .prose-site ul > li { position: relative; padding-left: 1.3em; }
+  .prose-site ul > li + li, .prose-site ol > li + li { margin-top: 0.45em; }
+  .prose-site ul > li::before {
+    content: '';
+    position: absolute;
+    left: 0.1em;
+    top: 0.72em;
+    width: 0.4em;
+    height: 0.4em;
+    border-radius: 999px;
+    background: var(--ink);
+  }
+  .prose-site ol { list-style: decimal; }
+  .prose-site ol > li::marker { color: var(--muted); font-weight: 500; }
+  .prose-site strong { font-weight: 600; color: var(--ink); }
+  .prose-site blockquote { border-left: 2px solid var(--ink); padding: 0.2em 0 0.2em 1.1em; color: var(--muted); }
+  .prose-site table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; }
+  .prose-site th { text-align: left; font-weight: 600; border-bottom: 1px solid var(--line-strong); padding: 0.7em 0.75em 0.7em 0; }
+  .prose-site td { border-bottom: 1px solid var(--line); padding: 0.7em 0.75em 0.7em 0; vertical-align: top; }
+  .prose-site .table-wrap { overflow-x: auto; }
+
+  /* Champs de formulaire : fond gris doux, sans bordure, arrondis */
+  .field { display: grid; gap: 0.45rem; }
+  .field label, .field legend { font-weight: 500; font-size: 0.85rem; }
+  .input {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.75rem 1rem;
+    font-size: 1rem; /* 16 px : évite le zoom automatique sur iPhone */
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid transparent;
+    border-radius: 14px;
+    transition: border-color 0.15s, background-color 0.15s;
+  }
+  .input::placeholder { color: #8a8a8a; opacity: 1; }
+  .input:hover { background: var(--surface-2); }
+  .input:focus { outline: none; border-color: var(--ink); background: #fff; }
+  .input[aria-invalid='true'] { border-color: #b42318; background: #fff; }
+  select.input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 256 256'%3E%3Cpath fill='%23121212' d='M213.66 101.66l-80 80a8 8 0 0 1-11.32 0l-80-80a8 8 0 0 1 11.32-11.32L128 164.69l74.34-74.35a8 8 0 0 1 11.32 11.32Z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+  }
+  /* Dans une carte grise, les champs passent en blanc pour rester visibles */
+  .bg-surface .input { background: #fff; border-color: var(--line); }
+  .bg-surface .input:hover { background: #fff; border-color: var(--line-strong); }
+  .bg-surface .input:focus { border-color: var(--ink); }
+  .field-error { color: #b42318; font-size: 0.85rem; font-weight: 500; }
+  .help { color: var(--muted); font-size: 0.85rem; }
+
+  /* Choix multiples présentés en pilules (noir quand sélectionné) */
+  .chip-input { position: absolute; opacity: 0; pointer-events: none; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.6rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .chip:hover { border-color: var(--ink); }
+  .chip-input:checked + .chip { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .chip-input:focus-visible + .chip { outline: 2px solid var(--ink); outline-offset: 2px; }
+}
+
+/* --------------------------------------------------------------- Motion */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
+  .js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+  /* Zoom très lent du visuel d'accueil à l'arrivée */
+  .frame-media-intro { animation: frame-in 1.6s var(--ease-out-expo) both; }
+  @keyframes frame-in { from { transform: scale(1.06); } to { transform: none; } }
+
+  .photo-zoom img { transition: transform 0.9s var(--ease-out-expo); }
+  .photo-zoom:hover img { transform: scale(1.04); }
+  .group:hover .round-arrow { transform: rotate(45deg); }
+}
+
+/* Masqué visuellement mais lu par les lecteurs d'écran */
+.sr-only-focusable:not(:focus) {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
