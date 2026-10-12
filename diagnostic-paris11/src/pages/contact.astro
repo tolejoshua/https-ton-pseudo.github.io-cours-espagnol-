@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { photos } from '@/lib/photos';
 import Icon from '@/components/Icon.astro';
 import Todo from '@/components/Todo.astro';
 import ConsentAndSubmit from '@/components/forms/ConsentAndSubmit.astro';
@@ -9,17 +10,17 @@ import { site, phoneHref } from '@/config/site';
   title={`Contact | ${site.name}, diagnostics immobiliers Paris 11e`}
   description="Contactez le cabinet de diagnostic immobilier du 54 avenue Philippe Auguste, Paris 11e : téléphone, formulaire, adresse et horaires."
   breadcrumbs={[{ name: 'Contact', href: '/contact/' }]}
+  hero={{ title: 'Nous <em>contacter</em>', lead: `${site.address.street}, ${site.address.postalCode} ${site.address.city}. Par téléphone, par formulaire ou sur rendez-vous.`, image: photos.facadeAngle, imagePosition: 'center 35%' }}
 >
-  <section class="container-site grid gap-12 pt-10 pb-20 md:pt-14 lg:grid-cols-12">
+  <section class="container-site grid gap-12 py-16 md:py-20 lg:grid-cols-12">
     <div class="lg:col-span-5">
-      <h1 class="text-5xl leading-[1.05] md:text-6xl">Contact</h1>
-      <dl class="mt-10 grid gap-8">
+      <dl class="grid gap-8">
         {site.contact.showPhone && (
           <div class="flex gap-4">
             <Icon name="phone" class="mt-1 size-6 shrink-0 text-accent" />
             <div>
               <dt class="text-sm font-semibold text-muted">Téléphone</dt>
-              <dd><a href={phoneHref} class="font-display text-3xl font-semibold hover:text-accent">{site.contact.phoneDisplay}</a></dd>
+              <dd><a href={phoneHref} class="text-[2rem] font-light italic tracking-[-0.03em] hover:underline">{site.contact.phoneDisplay}</a></dd>
             </div>
           </div>
         )}
@@ -53,7 +54,7 @@ import { site, phoneHref } from '@/config/site';
       </dl>
     </div>
 
-    <div class="rounded-[6px] border border-line bg-surface p-6 md:p-10 lg:col-span-7">
+    <div class="rounded-[16px] border border-line bg-surface p-6 md:p-10 lg:col-span-7">
       <h2 class="text-3xl">Écrivez-nous</h2>
       <p class="mt-2 text-muted">Pour un devis, le <a href="/devis/" class="link">formulaire dédié</a> est plus rapide.</p>
       <form name="contact" method="POST" action="/merci/" data-netlify="true" netlify-honeypot="bot-field" class="mt-8 grid gap-6" data-enhance>

@@ -1,35 +1,36 @@
 ---
-/** Bandeau d'appel à l'action final (devis, rendez-vous, téléphone). */
+/**
+ * Encart brun « texte + photo » (bloc « Property management » de la maquette),
+ * utilisé comme appel à l'action en bas de page.
+ */
+import { Image } from 'astro:assets';
 import { site, phoneHref } from '@/config/site';
+import { photos } from '@/lib/photos';
 import Icon from './Icon.astro';
-interface Props { title?: string; text?: string }
+interface Props { title?: string; text?: string; image?: ImageMetadata }
 const {
-  title = 'Un diagnostic à prévoir ?',
+  title = 'Un diagnostic <em>à prévoir ?</em>',
   text = `Décrivez votre bien en deux minutes. Nous vous répondons avec un devis détaillé et une date d’intervention, généralement ${site.delays.appointment}.`,
+  image = photos.cabinetLumiere,
 } = Astro.props;
 ---
-<section class="container-site pb-20 md:pb-28">
-  <div class="relative overflow-hidden rounded-[6px] bg-night px-6 py-14 text-on-night md:px-14 md:py-20" data-reveal>
-    <div class="relative z-10 grid gap-10 md:grid-cols-12 md:items-end">
-      <div class="md:col-span-7">
-        <h2 class="text-4xl leading-tight md:text-5xl">{title}</h2>
-        <p class="mt-5 max-w-xl text-lg text-on-night-muted">{text}</p>
+<section class="container-site pb-16 md:pb-24">
+  <div class="grid overflow-hidden rounded-[22px] bg-brown text-white md:grid-cols-2" data-reveal>
+    <div class="flex flex-col justify-between gap-10 p-7 md:p-12">
+      <div>
+        <h2 class="text-[2.6rem] md:text-[3.6rem]" set:html={title} />
+        <p class="mt-5 max-w-md text-sm leading-relaxed text-on-night-muted md:text-[0.95rem]">{text}</p>
       </div>
-      <div class="flex flex-col gap-3 sm:flex-row md:col-span-5 md:justify-end">
-        <a href="/devis/" class="btn btn-primary">Demander un devis <Icon name="arrow-right" class="size-4" /></a>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="/devis/" class="btn btn-white">Demander un devis</a>
         <a href="/rendez-vous/" class="btn btn-night">Prendre rendez-vous</a>
+        {site.contact.showPhone && (
+          <a href={phoneHref} class="inline-flex items-center gap-2 px-2 text-sm text-on-night-muted hover:text-white"><Icon name="phone" class="size-4" />{site.contact.phoneDisplay}</a>
+        )}
       </div>
     </div>
-    {site.contact.showPhone && (
-      <p class="relative z-10 mt-10 border-t border-white/10 pt-6 text-on-night-muted">
-        Vous préférez en parler ?
-        <a href={phoneHref} class="ml-1 font-semibold text-accent-on-night underline-offset-4 hover:underline">{site.contact.phoneDisplay}</a>
-      </p>
-    )}
-    <!-- Trame de plan discrète -->
-    <svg class="pointer-events-none absolute -right-10 -bottom-10 w-[28rem] text-on-night opacity-[0.06]" viewBox="0 0 200 200" aria-hidden="true">
-      <defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="currentColor" stroke-width="1" /></pattern></defs>
-      <rect width="200" height="200" fill="url(#grid)" />
-    </svg>
+    <div class="relative min-h-[260px] md:min-h-[420px]">
+      <Image src={image} alt="" widths={[480, 800, 1100]} sizes="(min-width: 768px) 50vw, 100vw" class="absolute inset-0 h-full w-full object-cover" />
+    </div>
   </div>
 </section>

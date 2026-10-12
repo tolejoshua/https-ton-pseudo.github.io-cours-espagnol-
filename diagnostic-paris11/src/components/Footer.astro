@@ -1,23 +1,22 @@
 ---
 import { getCollection } from 'astro:content';
 import { site, phoneHref } from '@/config/site';
-import Logo from './Logo.astro';
 import Todo from './Todo.astro';
 const diagnostics = (await getCollection('diagnostics')).sort((a, b) => a.data.order - b.data.order);
 const year = new Date().getFullYear();
 ---
-<footer class="bg-night text-on-night">
-  <div class="container-site grid gap-12 py-16 md:grid-cols-12">
-    <div class="md:col-span-4">
-      <Logo tone="night" />
-      <p class="mt-6 max-w-sm text-on-night-muted">{site.baseline}</p>
-      <address class="mt-6 not-italic leading-relaxed">
+<footer class="frame mt-6 bg-brown px-6 pt-14 pb-8 text-white md:px-12 md:pt-20">
+  <div class="grid gap-12 md:grid-cols-12">
+    <div class="md:col-span-5">
+      <p class="text-[2.6rem] leading-none tracking-[-0.04em] md:text-6xl">{site.name.split(' ').slice(0, -1).join(' ')} <em class="serif-em">{site.name.split(' ').slice(-1)}</em></p>
+      <p class="mt-5 max-w-sm text-sm leading-relaxed text-on-night-muted">{site.baseline}</p>
+      <address class="mt-8 text-sm not-italic leading-relaxed">
         {site.address.street}<br />{site.address.postalCode} {site.address.city}
       </address>
       {site.contact.showPhone && (
-        <a href={phoneHref} class="mt-3 inline-block text-lg font-semibold text-accent-on-night hover:underline">{site.contact.phoneDisplay}</a>
+        <a href={phoneHref} class="mt-3 inline-block text-xl tracking-[-0.02em] hover:underline">{site.contact.phoneDisplay}</a>
       )}
-      <p class="mt-4 text-sm text-on-night-muted">
+      <p class="mt-3 text-sm text-on-night-muted">
         {site.hours
           ? site.hours.map((h) => `${h.label} : ${h.opens.replace(':', 'h')} - ${h.closes.replace(':', 'h')}`).join(' / ')
           : <Todo label="horaires" />}
@@ -25,46 +24,44 @@ const year = new Date().getFullYear();
     </div>
 
     <nav aria-label="Diagnostics" class="md:col-span-3">
-      <h2 class="font-sans text-sm font-bold tracking-wide text-on-night">Diagnostics</h2>
-      <ul class="mt-4 grid gap-2 text-on-night-muted">
-        {diagnostics.map((d) => <li><a class="hover:text-on-night" href={`/diagnostics/${d.id}/`}>{d.data.shortName}</a></li>)}
+      <h2 class="text-xs font-medium tracking-normal text-on-night-muted">Diagnostics</h2>
+      <ul class="mt-4 grid gap-2 text-sm">
+        {diagnostics.map((d) => <li><a class="hover:underline" href={`/diagnostics/${d.id}/`}>{d.data.shortName}</a></li>)}
       </ul>
     </nav>
 
     <nav aria-label="Le cabinet" class="md:col-span-2">
-      <h2 class="font-sans text-sm font-bold tracking-wide text-on-night">Le cabinet</h2>
-      <ul class="mt-4 grid gap-2 text-on-night-muted">
-        <li><a class="hover:text-on-night" href="/a-propos/">À propos</a></li>
-        <li><a class="hover:text-on-night" href="/tarifs/">Tarifs</a></li>
-        <li><a class="hover:text-on-night" href="/quels-diagnostics/">Simulateur</a></li>
-        <li><a class="hover:text-on-night" href="/zones/">Zones desservies</a></li>
-        <li><a class="hover:text-on-night" href="/blog/">Conseils</a></li>
-        <li><a class="hover:text-on-night" href="/contact/">Contact</a></li>
+      <h2 class="text-xs font-medium tracking-normal text-on-night-muted">Le cabinet</h2>
+      <ul class="mt-4 grid gap-2 text-sm">
+        <li><a class="hover:underline" href="/a-propos/">À propos</a></li>
+        <li><a class="hover:underline" href="/tarifs/">Tarifs</a></li>
+        <li><a class="hover:underline" href="/quels-diagnostics/">Simulateur</a></li>
+        <li><a class="hover:underline" href="/zones/">Zones desservies</a></li>
+        <li><a class="hover:underline" href="/blog/">Conseils</a></li>
+        <li><a class="hover:underline" href="/contact/">Contact</a></li>
       </ul>
     </nav>
 
-    <div class="md:col-span-3">
-      <h2 class="font-sans text-sm font-bold tracking-wide text-on-night">Certification et assurance</h2>
-      <p class="mt-4 text-sm leading-relaxed text-on-night-muted">
-        Diagnostiqueur certifié par {site.certification.body ?? <Todo label="organisme certificateur" />}
-        {site.certification.number && <>, certificat n° {site.certification.number}</>}.
+    <div class="md:col-span-2">
+      <h2 class="text-xs font-medium tracking-normal text-on-night-muted">Certification</h2>
+      <p class="mt-4 text-sm leading-relaxed">
+        Certifié par {site.certification.body ?? <Todo label="organisme certificateur" />}
+        {site.certification.number && <>, n° {site.certification.number}</>}.
         Assurance RCP : {site.insurance.insurer ?? <Todo label="assureur" />}.
       </p>
-      <a class="mt-3 inline-block text-sm text-accent-on-night underline underline-offset-2" href={site.certification.directoryUrl} rel="noopener" target="_blank">
-        Annuaire officiel des diagnostiqueurs certifiés
+      <a class="mt-3 inline-block text-sm text-cream underline underline-offset-2" href={site.certification.directoryUrl} rel="noopener" target="_blank">
+        Annuaire officiel des diagnostiqueurs
       </a>
     </div>
   </div>
 
-  <div class="border-t border-white/10">
-    <div class="container-site flex flex-col gap-3 py-6 text-sm text-on-night-muted md:flex-row md:items-center md:justify-between">
-      <p>© {year} {site.name}. Tous droits réservés.</p>
-      <ul class="flex flex-wrap gap-x-5 gap-y-2">
-        <li><a class="hover:text-on-night" href="/mentions-legales/">Mentions légales</a></li>
-        <li><a class="hover:text-on-night" href="/confidentialite/">Confidentialité et cookies</a></li>
-        <li><a class="hover:text-on-night" href="/cgv/">CGV</a></li>
-        <li><a class="hover:text-on-night" href="/sitemap-index.xml">Plan du site</a></li>
-      </ul>
-    </div>
+  <div class="mt-14 flex flex-col gap-3 border-t border-white/15 pt-6 text-xs text-on-night-muted md:flex-row md:items-center md:justify-between">
+    <p>© {year} {site.name}. Tous droits réservés.</p>
+    <ul class="flex flex-wrap gap-x-5 gap-y-2">
+      <li><a class="hover:text-white" href="/mentions-legales/">Mentions légales</a></li>
+      <li><a class="hover:text-white" href="/confidentialite/">Confidentialité et cookies</a></li>
+      <li><a class="hover:text-white" href="/cgv/">CGV</a></li>
+      <li><a class="hover:text-white" href="/sitemap-index.xml">Plan du site</a></li>
+    </ul>
   </div>
 </footer>

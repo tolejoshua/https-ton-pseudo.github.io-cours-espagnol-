@@ -1,0 +1,72 @@
+---
+/**
+ * Navigation en onglets blancs « découpés » dans le haut du cadre photo
+ * (signature de la maquette) : marque à gauche, menu au centre, devis à droite.
+ * Sur mobile : marque à gauche, bouton menu à droite (panneau plein écran).
+ */
+import { mainNav, site, phoneHref } from '@/config/site';
+import Icon from './Icon.astro';
+const path = Astro.url.pathname;
+const isActive = (href: string) => path.startsWith(href);
+---
+<a href="/" class="notch notch-left text-[0.85rem] font-semibold tracking-[-0.01em]" aria-label={`${site.name}, accueil`}>
+  <span>{site.name}</span>
+  <span class="notch-foot" aria-hidden="true"></span>
+</a>
+
+<nav aria-label="Navigation principale" class="notch notch-center hidden lg:flex">
+  {mainNav.map((item) => (
+    <a href={item.href} class="nav-link" aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+  ))}
+</nav>
+
+<div class="notch notch-right">
+  <a href="/devis/" class="hidden rounded-full bg-ink px-4 py-[0.45rem] text-[0.8rem] font-medium text-white hover:bg-black sm:inline-flex">Demander un devis</a>
+  <button type="button" class="inline-flex size-9 items-center justify-center rounded-full hover:bg-surface lg:hidden" aria-expanded="false" aria-controls="menu-mobile" data-menu-toggle>
+    <span class="sr-only">Ouvrir le menu</span>
+    <Icon name="list" class="size-5" />
+  </button>
+  <span class="notch-foot" aria-hidden="true"></span>
+</div>
+
+<!-- Panneau de menu mobile -->
+<div id="menu-mobile" class="fixed inset-0 z-50 hidden bg-bg text-ink lg:hidden" data-menu>
+  <div class="flex h-full flex-col px-6 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+    <div class="flex items-center justify-between">
+      <span class="text-[0.95rem] font-semibold">{site.name}</span>
+      <button type="button" class="inline-flex size-11 items-center justify-center rounded-full bg-surface" data-menu-close>
+        <span class="sr-only">Fermer le menu</span>
+        <Icon name="x" class="size-5" />
+      </button>
+    </div>
+    <nav aria-label="Navigation mobile" class="mt-10 flex-1">
+      <ul class="grid gap-1">
+        {[...mainNav, { href: '/rendez-vous/', label: 'Rendez-vous' }, { href: '/contact/', label: 'Contact' }].map((item) => (
+          <li><a href={item.href} class="block py-2 text-[2rem] leading-tight tracking-[-0.03em]" aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="grid gap-3">
+      <a href="/devis/" class="btn btn-primary btn-block">Demander un devis</a>
+      {site.contact.showPhone && <a href={phoneHref} class="btn btn-ghost btn-block"><Icon name="phone" class="size-4" />{site.contact.phoneDisplay}</a>}
+    </div>
+  </div>
+</div>
+
+<script>
+  // Ouverture / fermeture du menu mobile (Échap pour fermer, focus rendu au bouton).
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  const close = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+  if (toggle && menu) {
+    const set = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      menu.classList.toggle('hidden', !open);
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+      if (open) close?.focus(); else toggle.focus();
+    };
+    toggle.addEventListener('click', () => set(true));
+    close?.addEventListener('click', () => set(false));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !menu.classList.contains('hidden')) set(false); });
+  }
+</script>

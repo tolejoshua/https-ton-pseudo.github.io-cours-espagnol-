@@ -1,20 +1,22 @@
 ---
 /**
  * Gabarit commun à toutes les pages : balises SEO, données structurées,
- * en-tête, pied de page, fil d'Ariane et barre d'actions mobile.
+ * cadre photo d'en-tête (navigation en onglets, titre, fil d'Ariane),
+ * pied de page et barre d'actions mobile.
+ *
+ * En-tête : passer `hero` ({ title, lead, image }) ou fournir un slot « hero »
+ * entièrement personnalisé (page d'accueil).
  */
-import '@fontsource-variable/manrope';
-import '@fontsource/cormorant-garamond/500.css';
-import '@fontsource/cormorant-garamond/600.css';
-import '@fontsource/cormorant-garamond/500-italic.css';
-import manropeWoff2 from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
+import '@fontsource-variable/inter-tight/wght.css';
+import '@fontsource-variable/inter-tight/wght-italic.css';
+import '@fontsource/instrument-serif/latin-400-italic.css';
+import interTightWoff2 from '@fontsource-variable/inter-tight/files/inter-tight-latin-wght-normal.woff2?url';
 import '@/styles/global.css';
 import { site } from '@/config/site';
 import { businessSchema, breadcrumbSchema } from '@/lib/schema';
-import Header from '@/components/Header.astro';
+import PageFrame from '@/components/PageFrame.astro';
 import Footer from '@/components/Footer.astro';
 import MobileActionBar from '@/components/MobileActionBar.astro';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
 
 interface Props {
   title: string; // balise <title> (50-60 caractères idéalement)
@@ -23,9 +25,10 @@ interface Props {
   breadcrumbs?: { name: string; href: string }[];
   noindex?: boolean;
   ogType?: 'website' | 'article';
+  hero?: { title: string; lead?: string; image?: ImageMetadata; imagePosition?: string; actions?: boolean; devisHref?: string };
 }
 
-const { title, description, schemas = [], breadcrumbs, noindex: noindexPage = false, ogType = 'website' } = Astro.props;
+const { title, description, schemas = [], breadcrumbs, noindex: noindexPage = false, ogType = 'website', hero } = Astro.props;
 // NOINDEX=true (variable d'environnement) : site de prévisualisation, non indexé par les moteurs.
 const noindex = noindexPage || process.env.NOINDEX === 'true';
 const siteUrl = (Astro.site ?? new URL('https://www.votre-domaine.fr')).toString().replace(/\/$/, '/');
@@ -49,11 +52,10 @@ if (breadcrumbs?.length) {
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, follow" />}
 
-    <link rel="preload" href={manropeWoff2} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={interTightWoff2} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="theme-color" content="#f6f2ea" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0b1622" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="format-detection" content="telephone=no" />
 
     <!-- Open Graph (aperçu lors d'un partage) -->
@@ -78,9 +80,10 @@ if (breadcrumbs?.length) {
     <script is:inline>document.documentElement.classList.add('js')</script>
   </head>
   <body class="min-h-[100dvh] pb-20 antialiased sm:pb-0">
-    <a href="#contenu" class="sr-only-focusable fixed top-3 left-3 z-50 rounded-full bg-ink px-4 py-2 font-semibold text-bg">Aller au contenu</a>
-    <Header />
-    {breadcrumbs?.length ? <Breadcrumbs items={breadcrumbs} /> : null}
+    <a href="#contenu" class="sr-only-focusable fixed top-3 left-3 z-50 rounded-full bg-ink px-4 py-2 font-semibold text-white">Aller au contenu</a>
+    {Astro.slots.has('hero')
+      ? <slot name="hero" />
+      : <PageFrame title={hero?.title} lead={hero?.lead} image={hero?.image} imagePosition={hero?.imagePosition} actions={hero?.actions} devisHref={hero?.devisHref} breadcrumbs={breadcrumbs} />}
     <main id="contenu">
       <slot />
     </main>

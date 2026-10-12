@@ -7,6 +7,7 @@
  * - Sinon : formulaire de demande de créneau (Netlify Forms), confirmé par le cabinet.
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { photos } from '@/lib/photos';
 import Icon from '@/components/Icon.astro';
 import ConsentAndSubmit from '@/components/forms/ConsentAndSubmit.astro';
 import { site, phoneHref } from '@/config/site';
@@ -18,20 +19,17 @@ const today = new Date().toISOString().slice(0, 10);
   title={`Rendez-vous diagnostic immobilier Paris | ${site.name}`}
   description="Prenez rendez-vous pour vos diagnostics immobiliers à Paris et en petite couronne. Intervention généralement sous une semaine, rapport sous 24 h."
   breadcrumbs={[{ name: 'Rendez-vous', href: '/rendez-vous/' }]}
+  hero={{ title: 'Prendre <em>rendez-vous</em>', lead: `Indiquez vos disponibilités : nous confirmons le créneau par téléphone ou par e-mail. Intervention généralement ${site.delays.appointment}.`, image: photos.pageCabinet }}
 >
-  <section class="container-site grid gap-12 pt-10 pb-20 md:pt-14 lg:grid-cols-12">
+  <section class="container-site grid gap-12 py-16 md:py-20 lg:grid-cols-12">
     <div class="lg:col-span-4">
-      <h1 class="text-5xl leading-[1.05] md:text-6xl">Prendre rendez-vous</h1>
-      <p class="mt-6 text-lg text-muted">
-        Indiquez vos disponibilités : nous confirmons le créneau par téléphone ou par e-mail. Intervention généralement {site.delays.appointment}.
-      </p>
-      <p class="mt-6 text-muted">Vous n’avez pas encore de devis ? <a href="/devis/" class="link font-semibold">Demandez-le d’abord</a>, c’est plus simple pour préparer la visite.</p>
+      <p class="text-muted">Vous n’avez pas encore de devis ? <a href="/devis/" class="link font-semibold">Demandez-le d’abord</a>, c’est plus simple pour préparer la visite.</p>
       {site.contact.showPhone && (
         <a href={phoneHref} class="btn btn-ghost mt-8"><Icon name="phone" class="size-5" />{site.contact.phoneDisplay}</a>
       )}
     </div>
 
-    <div class="rounded-[6px] border border-line bg-surface p-6 md:p-10 lg:col-span-8">
+    <div class="rounded-[16px] border border-line bg-surface p-6 md:p-10 lg:col-span-8">
       {site.calcomLink ? (
         <div data-cal={site.calcomLink}>
           <p class="text-muted">Choisissez directement un créneau dans notre agenda. Vous recevrez une confirmation et un rappel par e-mail.</p>
@@ -116,7 +114,7 @@ const today = new Date().toISOString().slice(0, 10);
     iframe.src = `https://cal.com/${wrap.dataset.cal}?embed=true&theme=auto`;
     iframe.title = 'Agenda de prise de rendez-vous';
     iframe.loading = 'lazy';
-    iframe.className = 'mt-6 h-[720px] w-full rounded-[6px] border border-line';
+    iframe.className = 'mt-6 h-[720px] w-full rounded-[16px] border border-line';
     wrap.replaceChildren(iframe);
   });
 </script>

@@ -1,6 +1,8 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { photos } from '@/lib/photos';
+import { accentTitle } from '@/lib/accent';
 import Icon from '@/components/Icon.astro';
 import Faq from '@/components/Faq.astro';
 import CtaBand from '@/components/CtaBand.astro';
@@ -31,23 +33,16 @@ const others = (await getCollection('blog', (x) => !x.data.draft && x.id !== ent
     articleSchema({ title: p.title, description: p.description, url, date: p.date, updated: p.updated, siteUrl }),
     ...(p.faq.length ? [faqSchema(p.faq)] : []),
   ]}
+  hero={{ title: accentTitle(p.title), lead: `${fmt.format(p.date)}${p.updated ? ` · mis à jour le ${fmt.format(p.updated)}` : ''} · ${minutes} min de lecture`, image: photos.pageBlog }}
 >
   <article>
-    <header class="container-site pt-10 pb-10 md:pt-14">
-      <p class="text-sm text-muted">
-        <time datetime={p.date.toISOString()}>{fmt.format(p.date)}</time>
-        {p.updated && <> · mis à jour le <time datetime={p.updated.toISOString()}>{fmt.format(p.updated)}</time></>}
-        · {minutes} min de lecture
-      </p>
-      <h1 class="mt-4 max-w-4xl text-5xl leading-[1.05] md:text-6xl">{p.title}</h1>
-    </header>
-    <div class="container-site grid gap-12 border-t border-line pt-4 pb-10 lg:grid-cols-12">
+    <div class="container-site grid gap-12 py-16 md:py-20 lg:grid-cols-12">
       <div class="prose-site lg:col-span-8"><Content /></div>
       <aside class="lg:col-span-4 lg:pt-16">
-        <div class="rounded-[6px] bg-night p-6 text-on-night lg:sticky lg:top-28">
-          <p class="font-display text-2xl font-semibold">Besoin d’un diagnostic ?</p>
+        <div class="rounded-[16px] bg-night p-6 text-on-night lg:sticky lg:top-28">
+          <p class="text-2xl tracking-[-0.02em]">Besoin d’un <em class="serif-em">diagnostic ?</em></p>
           <p class="mt-2 text-sm text-on-night-muted">Rendez-vous généralement sous une semaine, rapport sous 24 h.</p>
-          <a href="/devis/" class="btn btn-primary mt-5 w-full">Demander un devis</a>
+          <a href="/devis/" class="btn btn-white mt-5 w-full">Demander un devis</a>
           {related.length > 0 && (
             <ul class="mt-6 grid gap-2 border-t border-white/10 pt-5 text-sm">
               {related.map((r) => r && <li><a href={`/diagnostics/${r.id}/`} class="flex items-center gap-2 text-on-night-muted hover:text-accent-on-night"><Icon name={r.data.icon} class="size-4 text-accent-on-night" />{r.data.shortName}</a></li>)}
@@ -58,7 +53,7 @@ const others = (await getCollection('blog', (x) => !x.data.draft && x.id !== ent
     </div>
     {p.sources.length > 0 && (
       <div class="container-site">
-        <aside class="max-w-[68ch] rounded-[6px] border border-line p-6 text-sm" aria-labelledby="src-title">
+        <aside class="max-w-[68ch] rounded-[16px] border border-line p-6 text-sm" aria-labelledby="src-title">
           <h2 id="src-title" class="font-sans text-base font-bold">Sources</h2>
           <ul class="mt-3 grid gap-2 text-muted">
             {p.sources.map((s) => <li>{s.url ? <a class="link" href={s.url} target="_blank" rel="noopener">{s.label}</a> : s.label}</li>)}
@@ -75,7 +70,7 @@ const others = (await getCollection('blog', (x) => !x.data.draft && x.id !== ent
       <h2 id="more-title" class="text-3xl">À lire aussi</h2>
       <ul class="mt-6 grid gap-x-10 md:grid-cols-2">
         {others.map((o) => (
-          <li class="border-t border-line"><a href={`/blog/${o.id}/`} class="group block py-6"><span class="text-2xl font-display font-semibold group-hover:text-accent">{o.data.title}</span></a></li>
+          <li class="border-t border-line"><a href={`/blog/${o.id}/`} class="group block py-6"><span class="text-2xl tracking-[-0.02em] group-hover:underline group-hover:underline-offset-4">{o.data.title}</span></a></li>
         ))}
       </ul>
     </section>

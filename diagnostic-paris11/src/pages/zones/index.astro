@@ -1,6 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { photos, zonePhoto } from '@/lib/photos';
 import Icon from '@/components/Icon.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import { site } from '@/config/site';
@@ -13,38 +15,40 @@ const autres = zones.filter((z) => z.data.kind !== 'quartier');
   title={`Zones desservies, Paris et petite couronne | ${site.name}`}
   description="Diagnostiqueur immobilier basé à Paris 11e : interventions dans tout Paris, les Hauts-de-Seine, la Seine-Saint-Denis et le Val-de-Marne."
   breadcrumbs={[{ name: 'Zones desservies', href: '/zones/' }]}
+  hero={{ title: 'Zones <em>desservies</em>', lead: `Installés au ${site.address.street}, nous intervenons en priorité dans le 11e et l’est parisien, et dans tout Paris et la petite couronne.`, image: photos.pageZones }}
 >
-  <section class="container-site pt-10 pb-14 md:pt-14">
-    <h1 class="max-w-3xl text-5xl leading-[1.05] md:text-6xl">Zones desservies</h1>
-    <p class="mt-6 max-w-2xl text-lg text-muted">
-      Installés au {site.address.street}, nous intervenons en priorité dans le 11e et l’est parisien, et dans tout Paris et la petite couronne.
-    </p>
-  </section>
-
-  <section class="container-site pb-16" aria-labelledby="q-title">
-    <h2 id="q-title" class="text-3xl md:text-4xl">Le 11e arrondissement</h2>
-    <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <!-- Quartiers du 11e : cartes photo -->
+  <section class="container-site py-16 md:py-20" aria-labelledby="q-title">
+    <h2 id="q-title" class="text-[2.4rem] md:text-[3.2rem]">Le 11e <em>arrondissement</em></h2>
+    <ul class="mt-10 grid gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
       {quartiers.map((z, i) => (
         <li data-reveal style={`--i:${i % 3}`}>
-          <a href={`/zones/${z.id}/`} class="group flex h-full flex-col rounded-[6px] border border-line bg-surface p-6 hover:border-line-strong">
-            <span class="font-display text-2xl font-semibold group-hover:text-accent">{z.data.label}</span>
-            <span class="mt-2 text-sm text-muted">{z.data.places.slice(0, 4).join(', ')}</span>
-            <Icon name="arrow-right" class="mt-auto size-5 pt-4 text-accent" />
+          <a href={`/zones/${z.id}/`} class="group block">
+            <div class="photo-zoom relative overflow-hidden rounded-[16px]">
+              <Image src={zonePhoto(z.data.order)} alt="" widths={[400, 640, 800]} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" class="aspect-[4/3] w-full object-cover" />
+              <span class="round-arrow absolute top-4 right-4"><Icon name="arrow-up-right" class="size-4" /></span>
+            </div>
+            <h3 class="mt-4 text-xl group-hover:underline group-hover:underline-offset-4">{z.data.label}</h3>
+            <p class="mt-1 text-sm text-muted">{z.data.places.slice(0, 4).join(', ')}</p>
           </a>
         </li>
       ))}
     </ul>
   </section>
 
-  <section class="bg-night text-on-night" aria-labelledby="pc-title">
-    <div class="container-site py-16 md:py-20">
-      <h2 id="pc-title" class="text-3xl md:text-4xl">Paris et petite couronne</h2>
-      <ul class="mt-8 grid gap-4 md:grid-cols-2">
+  <!-- Paris et petite couronne : encart brun -->
+  <section class="container-site pb-16 md:pb-24" aria-labelledby="pc-title">
+    <div class="rounded-[22px] bg-brown p-7 text-white md:p-12">
+      <h2 id="pc-title" class="text-[2.4rem] md:text-[3.2rem]">Paris <em>et petite couronne</em></h2>
+      <ul class="mt-10 grid gap-x-8 md:grid-cols-2">
         {autres.map((z) => (
-          <li>
-            <a href={`/zones/${z.id}/`} class="group block h-full rounded-[6px] border border-white/15 p-6 hover:border-accent-on-night">
-              <span class="font-display text-2xl font-semibold group-hover:text-accent-on-night">{z.data.label}</span>
-              <span class="mt-2 block text-sm text-on-night-muted">{z.data.places.slice(0, 6).join(', ')}…</span>
+          <li class="border-t border-white/15">
+            <a href={`/zones/${z.id}/`} class="group flex items-start justify-between gap-6 py-6">
+              <span>
+                <span class="block text-2xl tracking-[-0.02em] group-hover:underline group-hover:underline-offset-4">{z.data.label}</span>
+                <span class="mt-2 block text-sm text-on-night-muted">{z.data.places.slice(0, 6).join(', ')}…</span>
+              </span>
+              <span class="round-arrow shrink-0"><Icon name="arrow-up-right" class="size-4" /></span>
             </a>
           </li>
         ))}
@@ -52,5 +56,5 @@ const autres = zones.filter((z) => z.data.kind !== 'quartier');
     </div>
   </section>
 
-  <div class="pt-20 md:pt-28"><CtaBand /></div>
+  <CtaBand />
 </BaseLayout>

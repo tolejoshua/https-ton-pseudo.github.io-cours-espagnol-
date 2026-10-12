@@ -103,6 +103,15 @@ Pour un agenda en ligne avec confirmation et rappels automatiques par e-mail :
 
 L'agenda ne se charge qu'au clic du visiteur, pour préserver la vitesse et la vie privée.
 
+## Système de design
+
+Inspiré de la maquette de référence fournie (agence immobilière haut de gamme) :
+
+- **Typographie** : Inter Tight pour tout le texte ; mots d'accent en **Instrument Serif italique** via `<em>` dans les titres (`Nos <em>diagnostics</em>`). Chiffres clés en Inter Tight fine italique.
+- **Couleurs** : blanc, noir `#121212`, gris doux `#f4f4f2`, un seul accent brun chaud `#33251d` (jetons dans `src/styles/global.css`).
+- **Signatures** : cadre photo arrondi en haut de chaque page avec **onglets blancs découpés** (marque, menu, devis) — composant `PageFrame` ; **barre de recherche en pilule** sur l'accueil, branchée sur le simulateur ; cartes photo en escalier ; encarts bruns texte + photo ; cartes diagnostics avec étiquettes noires.
+- **Photos** : `src/assets/photos/`, issues de Pexels (licence Pexels : usage commercial gratuit, attribution non obligatoire). À remplacer progressivement par de vraies photos du cabinet. Elles sont converties automatiquement en AVIF/WebP à la construction.
+
 ## Choix techniques
 
 - **Aucun cookie** : pas de bandeau à afficher. Polices hébergées localement, pas de Google Fonts ni de Google Maps intégré.

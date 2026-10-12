@@ -1,0 +1,82 @@
+---
+/**
+ * Cadre photo arrondi en haut de chaque page, avec la navigation en onglets.
+ * - size="home" : plein écran (accueil), contenu libre via le slot.
+ * - size="page" : en-tête de page avec titre (<em> = mot en serif italique),
+ *   chapô et fil d'Ariane.
+ * Sans photo, le cadre prend le brun de la charte.
+ */
+import { Picture } from 'astro:assets';
+import NotchNav from './NotchNav.astro';
+
+interface Props {
+  image?: ImageMetadata;
+  size?: 'home' | 'page';
+  title?: string; // HTML autorisé : <em>…</em>
+  lead?: string;
+  breadcrumbs?: { name: string; href: string }[];
+  imagePosition?: string;
+  actions?: boolean; // affiche « Demander un devis » et « Prendre rendez-vous »
+  devisHref?: string;
+}
+const { image, size = 'page', title, lead, breadcrumbs, imagePosition = 'center', actions = false, devisHref = '/devis/' } = Astro.props;
+const isHome = size === 'home';
+---
+<header
+  class:list={[
+    'frame frame-tabs',
+    isHome ? 'flex min-h-[calc(100svh-1.5rem)] flex-col md:h-[calc(100svh-1.5rem)] md:min-h-[640px] md:max-h-[940px]' : 'flex min-h-[420px] flex-col md:min-h-[480px]',
+  ]}
+>
+  {image && (
+    <Picture
+      src={image}
+      alt=""
+      formats={['avif', 'webp']}
+      widths={[480, 800, 1200, 1600]}
+      sizes="100vw"
+      quality={62}
+      loading="eager"
+      fetchpriority="high"
+      pictureAttributes={{ class: 'contents' }}
+      class:list={['frame-media', isHome && 'frame-media-intro']}
+      style={`object-position:${imagePosition}`}
+    />
+  )}
+  {image && <div class:list={['frame-shade', !isHome && 'frame-shade-strong']} aria-hidden="true"></div>}
+
+  <NotchNav />
+
+  {isHome ? (
+    <slot />
+  ) : (
+    <div class="flex flex-1 flex-col justify-between px-6 pt-20 pb-8 md:px-10 md:pt-24 md:pb-10">
+      {breadcrumbs?.length ? (
+        <nav aria-label="Fil d'Ariane" class="text-[0.78rem] text-on-night-muted">
+          <ol class="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <li><a href="/" class="hover:text-white">Accueil</a></li>
+            {breadcrumbs.map((it, i) => (
+              <li class="flex items-center gap-2">
+                <span aria-hidden="true">/</span>
+                {i === breadcrumbs.length - 1
+                  ? <span aria-current="page" class="text-white">{it.name}</span>
+                  : <a href={it.href} class="hover:text-white">{it.name}</a>}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      ) : <span />}
+      <div class="mt-16 max-w-3xl">
+        {title && <h1 class="text-[2.6rem] text-white sm:text-6xl md:text-[4.25rem]" set:html={title} />}
+        {lead && <p class="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-on-night-muted md:text-base">{lead}</p>}
+        {actions && (
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href={devisHref} class="btn btn-white">Demander un devis</a>
+            <a href="/rendez-vous/" class="btn btn-night">Prendre rendez-vous</a>
+          </div>
+        )}
+        <slot />
+      </div>
+    </div>
+  )}
+</header>

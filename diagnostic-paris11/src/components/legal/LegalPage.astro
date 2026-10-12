@@ -1,12 +1,11 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { accentTitle } from '@/lib/accent';
 interface Props { title: string; description: string; path: string; updated: string }
 const { title, description, path, updated } = Astro.props;
 ---
-<BaseLayout title={title} description={description} breadcrumbs={[{ name: title, href: path }]}>
-  <section class="container-site pt-10 pb-24 md:pt-14">
-    <h1 class="max-w-3xl text-5xl leading-[1.05] md:text-6xl">{title}</h1>
-    <p class="mt-4 text-sm text-muted">Dernière mise à jour : {updated}</p>
-    <div class="prose-site mt-10"><slot /></div>
+<BaseLayout title={title} description={description} breadcrumbs={[{ name: title, href: path }]} hero={{ title: accentTitle(title), lead: `Dernière mise à jour : ${updated}` }}>
+  <section class="container-site py-16 md:py-20">
+    <div class="prose-site"><slot /></div>
   </section>
 </BaseLayout>

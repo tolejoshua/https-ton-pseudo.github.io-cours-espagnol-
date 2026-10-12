@@ -7,7 +7,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/Icon.astro';
 import Todo from '@/components/Todo.astro';
 import CtaBand from '@/components/CtaBand.astro';
-import FacadeBlueprint from '@/components/illustrations/FacadeBlueprint.astro';
+import { photos } from '@/lib/photos';
 import { site } from '@/config/site';
 
 const commitments = [
@@ -21,22 +21,19 @@ const commitments = [
   title={`Le cabinet | ${site.name}, diagnostiqueur certifié Paris 11e`}
   description="Cabinet de diagnostic immobilier installé avenue Philippe Auguste, Paris 11e : diagnostiqueur certifié et assuré, rapports sous 24 h, interventions dans Paris et la petite couronne."
   breadcrumbs={[{ name: 'Le cabinet', href: '/a-propos/' }]}
+  hero={{ title: 'Un cabinet de quartier, <em>des diagnostics rigoureux</em>', lead: `Installé au ${site.address.street}, entre Nation et Charonne, ${site.name} réalise les diagnostics immobiliers obligatoires pour la vente et la location, dans tout Paris et la petite couronne.`, image: photos.pageCabinet }}
 >
-  <section class="container-site grid gap-12 pt-10 pb-16 md:pt-14 lg:grid-cols-12 lg:items-center">
+  <section class="container-site grid gap-12 py-16 md:py-20 lg:grid-cols-12 lg:items-center">
     <div class="lg:col-span-6">
-      <h1 class="text-5xl leading-[1.05] md:text-6xl">Un cabinet de quartier, des diagnostics rigoureux</h1>
-      <p class="mt-6 text-lg leading-relaxed text-muted">
-        Installé au {site.address.street}, entre Nation et Charonne, {site.name} réalise les diagnostics immobiliers obligatoires pour la vente et la location, dans tout Paris et la petite couronne.
-      </p>
-      <p class="mt-4 text-lg leading-relaxed text-muted">
+      <p class="label-sm">Notre histoire</p>
+      <p class="mt-4 text-[1.6rem] leading-[1.3] tracking-[-0.02em] md:text-[2rem]">
         <Todo label="2 ou 3 phrases sur l’histoire du cabinet : année de création, parcours du diagnostiqueur" />
       </p>
     </div>
     <!-- Emplacement photo : remplacer par une vraie photo du diagnostiqueur (format 4:5, 1200 × 1500 px) -->
     <figure class="lg:col-span-6">
-      <div class="flex aspect-[4/5] max-h-[34rem] w-full flex-col justify-end rounded-[6px] bg-night p-6 text-on-night">
-        <div class="opacity-40"><FacadeBlueprint /></div>
-        <p class="mt-4 text-sm"><span class="todo">[À confirmer : photo réelle du diagnostiqueur, 1200 × 1500 px]</span></p>
+      <div class="flex aspect-[4/5] max-h-[34rem] w-full items-end rounded-[16px] bg-surface p-6">
+        <p class="text-sm"><span class="todo">[À confirmer : photo réelle du diagnostiqueur, 1200 × 1500 px]</span></p>
       </div>
     </figure>
   </section>

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { photos } from '@/lib/photos';
 import Icon from '@/components/Icon.astro';
 import CtaBand from '@/components/CtaBand.astro';
 
@@ -10,16 +11,10 @@ const diagnostics = (await getCollection('diagnostics')).sort((a, b) => a.data.o
   title="Diagnostics immobiliers à Paris : liste, obligations, validité"
   description="DPE, amiante, plomb, électricité, gaz, termites, Carrez, ERP : obligations à la vente et à la location et durées de validité. Diagnostiqueur certifié à Paris 11e."
   breadcrumbs={[{ name: 'Diagnostics', href: '/diagnostics/' }]}
+  hero={{ title: 'Les diagnostics <em>immobiliers</em>', lead: 'Pour vendre ou louer, la loi impose un dossier de diagnostic technique. Sa composition dépend de l’année de construction, de l’âge des installations et du type d’opération.', image: photos.pageDiagnostics, actions: true }}
 >
-  <section class="container-site pt-10 pb-12 md:pt-14">
-    <h1 class="max-w-3xl text-5xl leading-[1.05] md:text-6xl">Les diagnostics immobiliers</h1>
-    <p class="mt-6 max-w-2xl text-lg text-muted">
-      Pour vendre ou louer, la loi impose un dossier de diagnostic technique. Sa composition dépend de l’année de construction, de l’âge des installations et du type d’opération.
-    </p>
-  </section>
-
-  <section class="container-site pb-20">
-    <div class="overflow-x-auto rounded-[6px] border border-line bg-surface">
+  <section class="container-site py-16 md:py-20">
+    <div class="overflow-x-auto rounded-[16px] border border-line bg-surface">
       <table class="w-full min-w-[44rem] text-left">
         <caption class="sr-only">Obligations et validité des diagnostics à la vente et à la location</caption>
         <thead class="text-sm text-muted">
